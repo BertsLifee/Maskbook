@@ -14,11 +14,12 @@ import {
 } from '@masknet/shared-base'
 import { KVStorage } from '@masknet/shared'
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
-import { ENS, Lens, MaskX, NextIDProof, NextIDStorage, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'
+import { ARBID, ENS, Lens, MaskX, NextIDProof, NextIDStorage, RSS3, SpaceID, Twitter } from '@masknet/web3-providers'
 import { MaskX_BaseAPI } from '@masknet/web3-providers/types'
 import { Web3StateSettings } from '../settings/index.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
+const ARBID_RE = /[^\t\n\v()[\]]{1,256}\.arb\b/gi
 const SID_RE = /[^\t\n\v()[\]]{1,256}\.bnb\b/gi
 const ADDRESS_FULL = /0x\w{40,}/i
 const RSS3_URL_RE = /https?:\/\/(?<name>[\w.]+)\.(rss3|cheers)\.bio/
@@ -30,14 +31,18 @@ function getENSNames(userId: string, nickname: string, bio: string) {
     return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)].flatMap((result) => result ?? [])
 }
 
-function getLensNames(nickname: string, bio: string, homepage: string) {
-    const homepageNames = homepage.match(LENS_URL_RE)
-    const names = [nickname.match(LENS_RE), bio.match(LENS_RE)].map((result) => result?.[0] ?? '').filter(Boolean)
-    return homepageNames === null || !homepageNames?.[1] ? names : [...names, homepageNames[1]]
+function getARBIDNames(userId: string, nickname: string, bio: string) {
+    return [userId.match(ARBID_RE), nickname.match(ARBID_RE), bio.match(ARBID_RE)].flatMap((result) => result ?? [])
 }
 
 function getSIDNames(userId: string, nickname: string, bio: string) {
     return [userId.match(SID_RE), nickname.match(SID_RE), bio.match(SID_RE)].flatMap((result) => result ?? [])
+}
+
+function getLensNames(nickname: string, bio: string, homepage: string) {
+    const homepageNames = homepage.match(LENS_URL_RE)
+    const names = [nickname.match(LENS_RE), bio.match(LENS_RE)].map((result) => result?.[0] ?? '').filter(Boolean)
+    return homepageNames === null || !homepageNames?.[1] ? names : [...names, homepageNames[1]]
 }
 
 function getRSS3Ids(nickname: string, profileURL: string, bio: string) {
@@ -182,6 +187,22 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         )
     }
 
+    private async getSocialAddressFromARBID({ identifier, nickname = '', bio = '' }: SocialIdentity) {
+        const names = getARBIDNames(identifier?.userId ?? '', nickname, bio)
+        if (!names.length) return
+
+        const allSettled = await Promise.allSettled(
+            names.map(async (name) => {
+                const address = await ARBID.lookup(name)
+                if (!address) return
+                return this.createSocialAddress(SocialAddressType.ARBID, address, name)
+            }),
+        )
+        return uniqBy(compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined))), (x) =>
+            x.address.toLowerCase(),
+        )
+    }
+
     private async getSocialAddressFromSpaceID({ identifier, nickname = '', bio = '' }: SocialIdentity) {
         const names = getSIDNames(identifier?.userId ?? '', nickname, bio)
         if (!names.length) return
@@ -275,6 +296,7 @@ export class IdentityService extends IdentityServiceState<ChainId> {
         const allSettled = await Promise.allSettled([
             this.getSocialAddressFromBio(identity),
             this.getSocialAddressFromENS(identity),
+            this.getSocialAddressFromARBID(identity),
             this.getSocialAddressFromSpaceID(identity),
             this.getSocialAddressFromAvatarNextID(identity),
             this.getSocialAddressFromRSS3(identity),

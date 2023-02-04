@@ -138,6 +138,7 @@ export enum TransactionDescriptorType {
 
 export enum SocialAddressType {
     Address = 'Address',
+    ARBID = 'ARBID',
     ENS = 'ENS',
     SPACE_ID = 'SPACE_ID',
     RSS3 = 'RSS3',

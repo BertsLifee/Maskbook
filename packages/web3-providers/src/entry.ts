@@ -59,6 +59,7 @@ import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
 import { RedPacketAPI } from './RedPacket/index.js'
+import { ARBID_API } from './ARBID/index.js'
 
 export const OpenSea = new OpenSeaAPI()
 export const LooksRare = new LooksRareAPI()
@@ -116,6 +117,7 @@ export const R2D2KeyValue = new R2D2KeyValueAPI()
 
 // Name Service
 export const ENS = new ENS_API()
+export const ARBID = new ARBID_API()
 export const SpaceID = new SpaceID_API()
 export const Bonfida = new BonfidaAPI()
 

@@ -42,6 +42,7 @@ import { RSS3API } from '../RSS3/index.js'
 import { PlatformToChainIdMap } from '../RSS3/constants.js'
 import { ENS_API } from '../ENS/index.js'
 import { SpaceID_API } from '../SpaceID/index.js'
+import { ARBID_API } from '../ARBID/index.js'
 
 const isValidAddress = (address?: string): boolean => {
     return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
@@ -87,6 +88,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     private RSS3 = new RSS3API()
     private CoinGeckoTrending = new CoinGeckoTrendingAPI()
     private ENS = new ENS_API()
+    private ARBID = new ARBID_API()
     private SpaceID = new SpaceID_API()
 
     private parseKeyword(keyword: string): { word: string; field?: string } {
@@ -112,6 +114,11 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
                     this.ENS.lookup(domain).then((x = '') => {
                         if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
                         return [x, ChainIdEVM.Mainnet]
+                    }),
+                () =>
+                    this.ARBID.lookup(domain).then((x = '') => {
+                        if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
+                        return [x, ChainIdEVM.Arbitrum]
                     }),
                 () =>
                     this.SpaceID.lookup(domain).then((x = '') => {
@@ -176,6 +183,7 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         const [domain, chainId] = await attemptUntil(
             [
                 () => this.ENS.reverse(address).then((x) => [x, ChainIdEVM.Mainnet]),
+                () => this.ARBID.reverse(address).then((x) => [x, ChainIdEVM.Arbitrum]),
                 () => this.SpaceID.reverse(address).then((x) => [x, ChainIdEVM.BSC]),
             ],
             ['', ChainIdEVM.Mainnet],
