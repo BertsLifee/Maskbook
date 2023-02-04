@@ -22,7 +22,7 @@ export function isValidChainId(chainId?: ChainId): chainId is ChainId {
     return getEnumAsArray(ChainId).some((x) => x.value === chainId)
 }
 
-export function isZeroAddress(address?: string): address is string {
+export function isZeroAddress(address?: string) {
     return isSameAddress(address, ZERO_ADDRESS)
 }
 

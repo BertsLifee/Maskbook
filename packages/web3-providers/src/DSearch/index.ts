@@ -87,9 +87,13 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
     private CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
     private RSS3 = new RSS3API()
     private CoinGeckoTrending = new CoinGeckoTrendingAPI()
-    private ENS = new ENS_API()
-    private ARBID = new ARBID_API()
-    private SpaceID = new SpaceID_API()
+
+    /** Domain resolvers */
+    private resolvers = [
+        [ChainIdEVM.Mainnet, new ENS_API()],
+        [ChainIdEVM.Arbitrum, new ARBID_API()],
+        [ChainIdEVM.BSC, new SpaceID_API()],
+    ] as const
 
     private parseKeyword(keyword: string): { word: string; field?: string } {
         const words = keyword.split(':')
@@ -109,23 +113,12 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         if (!isValidDomainEVM(domain)) return EMPTY_LIST
 
         const [address, chainId] = await attemptUntil(
-            [
-                () =>
-                    this.ENS.lookup(domain).then((x = '') => {
-                        if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
-                        return [x, ChainIdEVM.Mainnet]
-                    }),
-                () =>
-                    this.ARBID.lookup(domain).then((x = '') => {
-                        if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
-                        return [x, ChainIdEVM.Arbitrum]
-                    }),
-                () =>
-                    this.SpaceID.lookup(domain).then((x = '') => {
-                        if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
-                        return [x, ChainIdEVM.BSC]
-                    }),
-            ],
+            this.resolvers.map(([chainId, resolver]) => async () => {
+                const address = await resolver.lookup(domain)
+                if (!address || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
+
+                return [address, chainId] as const
+            }),
             ['', ChainIdEVM.Mainnet],
         )
         if (!isValidAddressEVM(address) || isZeroAddressEVM(address)) return EMPTY_LIST
@@ -181,11 +174,11 @@ export class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper
         if (!isValidAddressEVM(address)) return EMPTY_LIST
 
         const [domain, chainId] = await attemptUntil(
-            [
-                () => this.ENS.reverse(address).then((x) => [x, ChainIdEVM.Mainnet]),
-                () => this.ARBID.reverse(address).then((x) => [x, ChainIdEVM.Arbitrum]),
-                () => this.SpaceID.reverse(address).then((x) => [x, ChainIdEVM.BSC]),
-            ],
+            this.resolvers.map(([chainId, resolver]) => async () => {
+                const domain = await resolver.reverse(address)
+                if (!isValidDomainEVM(domain)) throw new Error(`No result for ${address}.`)
+                return [domain, chainId] as const
+            }),
             ['', ChainIdEVM.Mainnet],
         )
 
