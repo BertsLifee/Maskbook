@@ -45,9 +45,13 @@ export class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provi
             from: account,
             show_attribute: true,
         })
-        const response = await fetchFromNFTScanV2<Response<EVM.AssetsGroup[]>>(chainId, path)
-        const assets = response?.data?.flatMap((x) => x.assets.map((y) => createNonFungibleAsset(chainId, y, x)))
-        return createPageable(assets ?? EMPTY_LIST, createIndicator(indicator))
+        try {
+            const response = await fetchFromNFTScanV2<Response<EVM.AssetsGroup[]>>(chainId, path)
+            const assets = response?.data?.flatMap((x) => x.assets.map((y) => createNonFungibleAsset(chainId, y, x)))
+            return createPageable(assets ?? EMPTY_LIST, createIndicator(indicator))
+        } catch {
+            return createPageable(EMPTY_LIST, createIndicator(indicator))
+        }
     }
 
     async getAssetsByCollection(
