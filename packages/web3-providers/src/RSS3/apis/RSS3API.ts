@@ -1,9 +1,9 @@
 import RSS3 from 'rss3-next'
 import urlcat, { query } from 'urlcat'
-import { createIndicator, createNextIndicator, createPageable, HubOptions } from '@masknet/web3-shared-base'
+import { createIndicator, createNextIndicator, createPageable, type HubOptions } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { RSS3_FEED_ENDPOINT, RSS3_LEGACY_ENDPOINT, RSS3_ENDPOINT, NameServiceToChainMap } from '../constants.js'
-import { RSS3NameServiceResponse, RSS3ProfilesResponse, TAG, TYPE } from '../types.js'
+import { type RSS3NameServiceResponse, type RSS3ProfilesResponse, TAG, TYPE } from '../types.js'
 import { normalizedFeed } from '../helpers.js'
 import { fetchJSON } from '../../entry-helpers.js'
 import { RSS3BaseAPI } from '../../entry-types.js'
@@ -116,10 +116,12 @@ export class RSS3API implements RSS3BaseAPI.Provider {
             limit: size,
             cursor: indicator?.id ?? '',
         })
-        const { result, cursor } = await fetchJSON<{
+        const res = await fetchJSON<{
             result: RSS3BaseAPI.Web3Feed[]
             cursor?: string
         }>(url)
+        if (!res.result) Sentry.captureException(new Error(`No feeds response from ${url}`))
+        const { result = [], cursor } = res
         result.forEach(normalizedFeed)
         // createNextIndicator() return a fallback indicator as `{ id: 1, index: 1 }`
         // which will fail the API, so we pass undefined if cursor is undefined

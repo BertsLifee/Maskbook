@@ -3,6 +3,7 @@
   "references": [
     // Only list top-level projects here
     { "path": "./packages/polyfills/" },
+    { "path": "./packages/app/" },
     { "path": "./packages/mask/" },
     { "path": "./packages/injected-script/main" },
     { "path": "./packages/mask-sdk/main" },
@@ -28,7 +29,6 @@
     // Exclude everything by default. Include them in each project on-demand
     "types": ["masknet__global-types"],
     "resolveJsonModule": true,
-    "preserveValueImports": false,
     "paths": {
       // # Why?
       // TypeScript project reference requires manually declaring all referenced projects.
@@ -66,6 +66,7 @@
       // This will bring another problem: now we can reference a project without installing it as a monorepo dependency,
       // which is unwanted. We need to take care of this.
 
+      "@masknet/app": ["./packages/app/src"],
       "@masknet/backup-format": ["./packages/backup-format/src"],
       "@masknet/configuration": ["./packages/configuration/src"],
       "@masknet/dashboard": ["./packages/dashboard/src"],
@@ -86,7 +87,7 @@
       "@masknet/theme": ["./packages/theme/src"],
       // @masknet/web3-constants is not listed. It is not a TS project (only contains JSON files).
       // @masknet/web3-contracts is not listed. It is not a TS project (only contains generated JSON and .d.ts files).
-      "@masknet/web3-logs": ["./packages/web3-logs/src"],
+      "@masknet/web3-telemetry": ["./packages/web3-telemetry/src"],
       "@masknet/web3-helpers": ["./packages/web3-helpers/src"],
       "@masknet/web3-providers": ["./packages/web3-providers/src"],
       "@masknet/web3-state": ["./packages/web3-state/src"],
@@ -105,7 +106,7 @@
       "@masknet/sandboxed-plugin-runtime/extension-page": ["./packages/sandboxed-plugin-runtime/src/extension-page"],
       "@masknet/base": ["./packages/base/src"],
       "@masknet/config": ["./packages/config/src"],
-      // @masknet/scripts: insert-here 2
+      // @masknet/scripts: inserpackages/app/src
 
       // Plugins
       "@masknet/plugin-debugger": ["./packages/plugins/Debugger/src"],

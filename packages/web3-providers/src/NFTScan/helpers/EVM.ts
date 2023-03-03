@@ -6,18 +6,18 @@ import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
 import type { ERC721 } from '@masknet/web3-contracts/types/ERC721.js'
 import {
     formatPercentage,
-    NonFungibleAsset,
-    NonFungibleCollection,
-    NonFungibleTokenContract,
-    NonFungibleTokenEvent,
-    NonFungibleTokenTrait,
+    type NonFungibleAsset,
+    type NonFungibleCollection,
+    type NonFungibleTokenContract,
+    type NonFungibleTokenEvent,
+    type NonFungibleTokenTrait,
     resolveResourceURL,
     scale10,
     SourceType,
     TokenType,
 } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    type ChainId,
     chainResolver,
     createContract,
     isENSContractAddress,
@@ -167,8 +167,7 @@ export function createNonFungibleAsset(
             // If collectionContext.logo_url is null, we will directly render a fallback logo instead.
             // So do not fallback to the constructed NFTScan logo url
             iconURL: collection ? collection.logo_url : `${urlcat(NFTSCAN_LOGO_BASE, asset.contract_address)}.png`,
-            // TODO fetch via `collections` API
-            verified: false,
+            verified: collection?.verified || collection?.opensea_verified,
             createdAt: asset.mint_timestamp,
         },
         source: SourceType.NFTScan,

@@ -3,11 +3,16 @@ import { compact, omit } from 'lodash-es'
 import { v4 as uuid } from 'uuid'
 import * as bip39 from 'bip39'
 import { decodeArrayBuffer, unreachable } from '@masknet/kit'
-import { BackupPreview, getBackupPreviewInfo, normalizeBackup, NormalizedBackup } from '@masknet/backup-format'
+import {
+    type BackupPreview,
+    getBackupPreviewInfo,
+    normalizeBackup,
+    type NormalizedBackup,
+} from '@masknet/backup-format'
 import {
     ECKeyIdentifierFromJsonWebKey,
-    EC_Private_JsonWebKey,
-    EC_Public_JsonWebKey,
+    type EC_Private_JsonWebKey,
+    type EC_Public_JsonWebKey,
     fromBase64URL,
     isEC_Private_JsonWebKey,
     PopupRoutes,
@@ -142,11 +147,12 @@ export async function getUnconfirmedBackup(id: string): Promise<
     try {
         const personaAddresses = compact(
             [...backup.personas.values()].map((x) => {
-                if (!x.privateKey.none) {
+                if (x.privateKey.some) {
                     const privateKey = x.privateKey.unwrap()
                     if (!privateKey.d) return
                     return bufferToHex(publicToAddress(privateToPublic(Buffer.from(fromBase64URL(privateKey.d)))))
-                } else if (x.address) return x.address
+                }
+                if (x.address.some) return x.address.val
                 return
             }),
         )
@@ -164,9 +170,7 @@ export async function getUnconfirmedBackup(id: string): Promise<
                     .map((x, index) => ({ address: x.address, name: `Smart Pay ${index + 1}` })),
             ],
         }
-    } catch (error) {
-        return {
-            wallets,
-        }
+    } catch {
+        return { wallets }
     }
 }

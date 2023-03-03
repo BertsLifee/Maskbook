@@ -1,11 +1,11 @@
-import { useCallback, FC, useState, useMemo } from 'react'
+import { useCallback, type FC, useState, useMemo } from 'react'
 import { useNetworkContext, useNativeTokenAddress } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { FungibleTokenList, useSharedI18N } from '@masknet/shared'
-import { EMPTY_LIST, EnhanceableSite, isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, isDashboardPage, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import type { FungibleToken } from '@masknet/web3-shared-base'
-import { DialogContent, Theme, useMediaQuery } from '@mui/material'
+import { DialogContent, type Theme, useMediaQuery } from '@mui/material'
 import { useBaseUIRuntime } from '../base/index.js'
 import { InjectedDialog } from '../components/index.js'
 import { useRowSize } from '../../hooks/useRowSize.js'
@@ -52,7 +52,7 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     disableSearchBar?: boolean
     disableNativeToken?: boolean
     selectedTokens?: string[]
-    onSubmit?(token: Web3Helper.FungibleTokenScope<'all'> | null): void
+    onSubmit?(token: Web3Helper.FungibleTokenAll | null): void
     onClose?(): void
 }
 

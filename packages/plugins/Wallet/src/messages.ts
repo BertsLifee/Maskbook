@@ -1,5 +1,5 @@
 import type { BigNumber } from 'bignumber.js'
-import { createPluginMessage, PluginMessageEmitter } from '@masknet/plugin-infra'
+import { createPluginMessage, type PluginMessageEmitter } from '@masknet/plugin-infra'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { PluginID, NetworkPluginID } from '@masknet/shared-base'
 import type { GasOptionType, NonFungibleCollection } from '@masknet/web3-shared-base'
@@ -85,13 +85,6 @@ export type SelectNftContractDialogEvent = {
     collection?: NonFungibleCollection<ChainId, SchemaType>
 }
 
-export interface SocketMessageUpdatedEvent {
-    id: string
-    done: boolean
-    error?: unknown
-    from: 'cache' | 'remote'
-}
-
 export interface WalletMessage {
     /**
      * Select provider dialog
@@ -111,7 +104,7 @@ export interface WalletMessage {
     /**
      * Application dialog
      */
-    ApplicationDialogUpdated: ApplicationDialogEvent
+    applicationDialogUpdated: ApplicationDialogEvent
 
     /**
      * Gas setting dialog
@@ -134,15 +127,11 @@ export interface WalletMessage {
     walletRiskWarningDialogUpdated: WalletRiskWarningDialogEvent
 
     walletsUpdated: void
-    phrasesUpdated: void
-    addressBookUpdated: void
-    transactionsUpdated: void
     requestsUpdated: {
         hasRequest: boolean
     }
     /** true: Now locked; false: Now unlocked */
     walletLockStatusUpdated: boolean
-    socketMessageUpdated: SocketMessageUpdatedEvent
 
     rpc: unknown
 }

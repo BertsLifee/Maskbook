@@ -9,7 +9,7 @@ import { Translate } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
-import { CardFrame, FeedCardProps } from '../base.js'
+import { CardFrame, type FeedCardProps } from '../base.js'
 import { formatValue, Label } from './common.js'
 
 const useStyles = makeStyles<void, 'tokenIcon' | 'verboseToken'>()((theme, _, refs) => ({
@@ -91,7 +91,6 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
             <Typography className={classes.summary}>
                 {verbose ? (
                     <Translate.token_operation_verbose
-                        shouldUnescape
                         values={{
                             from,
                             to,
@@ -107,7 +106,6 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
                     />
                 ) : (
                     <Translate.token_operation
-                        shouldUnescape
                         values={{
                             from,
                             to,
@@ -125,13 +123,7 @@ export const TokenOperationCard: FC<TokenFeedCardProps> = ({ feed, ...rest }) =>
             </Typography>
             {metadata ? (
                 <div className={cx(classes.token, verbose ? classes.verboseToken : null)}>
-                    <Image
-                        classes={{ container: classes.tokenIcon }}
-                        optimistic
-                        src={metadata?.image}
-                        height={40}
-                        width={40}
-                    />
+                    <Image classes={{ container: classes.tokenIcon }} src={metadata?.image} height={40} width={40} />
                     <Typography className={classes.value}>
                         {t.token_value({
                             value: formatValue(metadata),

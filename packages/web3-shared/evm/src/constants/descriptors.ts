@@ -1,5 +1,10 @@
 import { getEnumAsArray } from '@masknet/kit'
-import { ChainDescriptor, NetworkDescriptor, ProviderDescriptor, TokenType } from '@masknet/web3-shared-base'
+import {
+    type ChainDescriptor,
+    type NetworkDescriptor,
+    type ProviderDescriptor,
+    TokenType,
+} from '@masknet/web3-shared-base'
 import { EnhanceableSite, ExtensionSite, isFirefox, isOpera, NetworkPluginID } from '@masknet/shared-base'
 import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
@@ -37,7 +42,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         shortName: 'ETH',
         icon: new URL('../assets/ethereum.png', import.meta.url),
         iconColor: 'rgb(28, 104, 243)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         backgroundGradient:
             'linear-gradient(180deg, rgba(98, 126, 234, 0.15) 0%, rgba(98, 126, 234, 0.05) 100%), rgba(255, 255, 255, 0.2)',
         isMainnet: true,
@@ -50,7 +55,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Ropsten',
         icon: new URL('../assets/ethereum.png', import.meta.url),
         iconColor: 'rgb(255, 65, 130)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         isMainnet: false,
     },
     {
@@ -61,7 +66,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Kovan',
         icon: new URL('../assets/ethereum.png', import.meta.url),
         iconColor: 'rgb(133, 89, 255)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         isMainnet: false,
     },
     {
@@ -72,7 +77,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Rinkeby',
         icon: new URL('../assets/ethereum.png', import.meta.url),
         iconColor: 'rgb(133, 89, 255)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         isMainnet: false,
     },
     {
@@ -83,7 +88,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'G\u00F6rli',
         icon: new URL('../assets/ethereum.png', import.meta.url),
         iconColor: 'rgb(48, 153, 242)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         isMainnet: false,
     },
     {
@@ -94,7 +99,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'BNB Chain',
         icon: new URL('../assets/binance.png', import.meta.url),
         iconColor: 'rgb(240, 185, 10)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         backgroundGradient: 'linear-gradient(180deg, rgba(243, 186, 47, 0.15) 0%, rgba(243, 186, 47, 0.05) 100%)',
         isMainnet: true,
     },
@@ -106,7 +111,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'BSCT',
         icon: new URL('../assets/binance.png', import.meta.url),
         iconColor: 'rgb(240, 185, 10)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         isMainnet: false,
     },
     {
@@ -117,7 +122,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Polygon',
         icon: new URL('../assets/polygon.png', import.meta.url),
         iconColor: 'rgb(119, 62, 225)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         backgroundGradient: 'linear-gradient(180deg, rgba(130, 71, 229, 0.15) 0%, rgba(130, 71, 229, 0.05) 100%)',
         isMainnet: true,
     },
@@ -129,7 +134,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Mumbai',
         icon: new URL('../assets/polygon.png', import.meta.url),
         iconColor: 'rgb(119, 62, 225)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         isMainnet: false,
     },
     {
@@ -141,7 +146,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         shortName: 'Arbitrum',
         icon: new URL('../assets/arbitrum.png', import.meta.url),
         iconColor: 'rgb(36, 150, 238)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         backgroundGradient: 'linear-gradient(180deg, rgba(40, 160, 240, 0.15) 0%, rgba(40, 160, 240, 0.05) 100%)',
         isMainnet: true,
     },
@@ -153,7 +158,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Arbitrum Rinkeby',
         icon: new URL('../assets/arbitrum.png', import.meta.url),
         iconColor: 'rgb(36, 150, 238)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         backgroundGradient: 'linear-gradient(180deg, rgba(40, 160, 240, 0.15) 0%, rgba(40, 160, 240, 0.05) 100%)',
         isMainnet: false,
     },
@@ -165,7 +170,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Gnosis',
         icon: new URL('../assets/xdai.png', import.meta.url),
         iconColor: 'rgb(73, 169, 166)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         backgroundGradient: 'linear-gradient(180deg, rgba(72, 168, 166, 0.15) 0%, rgba(72, 168, 166, 0.05) 100%)',
         isMainnet: true,
     },
@@ -177,7 +182,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Celo',
         icon: new URL('../assets/celo.png', import.meta.url),
         iconColor: 'rgb(53, 208, 127)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         backgroundGradient: 'linear-gradient(180deg, rgba(251, 204, 92, 0.15) 0%, rgba(251, 204, 92, 0.05) 100%)',
         isMainnet: false,
     },
@@ -189,7 +194,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Fantom',
         icon: new URL('../assets/fantom.png', import.meta.url),
         iconColor: 'rgb(73, 169, 166)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         backgroundGradient: 'linear-gradient(180deg, rgba(24, 94, 255, 0.15) 0%, rgba(24, 94, 255, 0.05) 100%)',
         isMainnet: true,
     },
@@ -203,7 +208,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         icon: new URL('../assets/avalanche.png', import.meta.url),
         backgroundGradient: 'linear-gradient(180deg, rgba(232, 65, 66, 0.15) 0%, rgba(232, 65, 66, 0.05) 100%)',
         iconColor: 'rgb(232, 65, 66)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         isMainnet: true,
     },
     {
@@ -214,7 +219,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Aurora',
         icon: new URL('../assets/aurora.png', import.meta.url),
         iconColor: 'rgb(112, 212, 74)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         backgroundGradient: 'linear-gradient(180deg, rgba(112, 212, 75, 0.15) 0%, rgba(112, 212, 75, 0.05) 100%)',
         isMainnet: true,
     },
@@ -226,7 +231,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Harmony',
         icon: new URL('../assets/harmony.png', import.meta.url),
         iconColor: 'rgb(73, 169, 166)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         backgroundGradient: 'linear-gradient(180deg, rgba(112, 212, 75, 0.15) 0%, rgba(112, 212, 75, 0.05) 100%)',
         isMainnet: true,
     },
@@ -238,7 +243,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Conflux',
         icon: new URL('../assets/conflux.png', import.meta.url),
         iconColor: 'rgb(112, 212, 74)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         isMainnet: true,
     },
     {
@@ -249,7 +254,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         name: 'Astar',
         icon: new URL('../assets/astar.png', import.meta.url),
         iconColor: 'rgb(36, 150, 238)',
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
         isMainnet: true,
     },
     {
@@ -261,7 +266,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         icon: new URL('../assets/optimism.png', import.meta.url),
         iconColor: 'rgb(232, 65, 66)',
         isMainnet: true,
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
     },
     {
         ID: `${PLUGIN_ID}_moonbeam`,
@@ -272,7 +277,7 @@ export const NETWORK_DESCRIPTORS: Array<NetworkDescriptor<ChainId, NetworkType>>
         iconColor: 'rgb(36, 150, 238)',
         name: 'Moonbeam',
         isMainnet: false,
-        averageBlockDelay: 15,
+        averageBlockDelay: 10,
     },
 ]
 export const PROVIDER_DESCRIPTORS: Array<ProviderDescriptor<ChainId, ProviderType>> = [

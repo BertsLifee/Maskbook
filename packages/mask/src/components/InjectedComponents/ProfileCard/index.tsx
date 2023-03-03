@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { type FC, useEffect, useMemo, useState } from 'react'
 import { Trans } from 'react-i18next'
 import { useUpdateEffect } from 'react-use'
 import { first } from 'lodash-es'
@@ -12,17 +12,18 @@ import { getAvailablePlugins } from '@masknet/plugin-infra'
 import { useSocialAccountsBySettings } from '@masknet/shared'
 import { EMPTY_LIST, PluginID, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { isSameAddress, SocialIdentity } from '@masknet/web3-shared-base'
+import { isSameAddress, type SocialIdentity } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
-import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, Web3ContextProvider } from '@masknet/web3-hooks-base'
 import { MaskMessages, addressSorter, useI18N, useLocationChange } from '../../../utils/index.js'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity: SocialIdentity
     badgeBounding?: DOMRect
+    currentAddress?: string
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -104,7 +105,7 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-export const ProfileCard: FC<Props> = ({ identity, badgeBounding, ...rest }) => {
+export const ProfileCard: FC<Props> = ({ identity, badgeBounding, currentAddress, ...rest }) => {
     const { classes, cx } = useStyles(undefined, { props: { classes: rest.classes } })
 
     const { t } = useI18N()
@@ -119,9 +120,10 @@ export const ProfileCard: FC<Props> = ({ identity, badgeBounding, ...rest }) => 
         [allSocialAccounts],
     )
 
-    const [selectedAddress, setSelectedAddress] = useState<string>()
+    const [selectedAddress, setSelectedAddress] = useState<string | undefined>(currentAddress)
     const firstAddress = first(socialAccounts)?.address
-    const activeAddress = selectedAddress ?? firstAddress
+    const activeAddress = selectedAddress || firstAddress
+
     const selectedSocialAccount = useMemo(
         () => socialAccounts.find((x) => isSameAddress(x.address, activeAddress)),
         [activeAddress, socialAccounts],
@@ -201,7 +203,9 @@ export const ProfileCard: FC<Props> = ({ identity, badgeBounding, ...rest }) => 
                         </div>
                     )}
                 </div>
-                <div className={classes.content}>{component}</div>
+                <div className={classes.content}>
+                    <ScopedDomainsContainer.Provider>{component}</ScopedDomainsContainer.Provider>
+                </div>
                 <div className={classes.footer}>
                     <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
                     <Typography className={classes.cardName}>{t('web3_profile_card_name')}</Typography>

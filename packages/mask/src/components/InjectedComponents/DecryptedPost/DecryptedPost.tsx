@@ -1,5 +1,5 @@
 import { Fragment, useContext, useEffect, useReducer } from 'react'
-import { extractTextFromTypedMessage, TypedMessage } from '@masknet/typed-message'
+import { extractTextFromTypedMessage, type TypedMessage } from '@masknet/typed-message'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 
 import Services, { GeneratorServices } from '../../../extension/service.js'
@@ -220,7 +220,6 @@ async function makeProgress(
             if (progress.event === DecryptIntermediateProgressKind.TryDecryptByE2E) reportProgress('e2e', '')
             else safeUnreachable(progress.event)
         } else if (progress.type === DecryptProgressKind.Error) {
-            console.log(progress.message)
         } else safeUnreachable(progress)
     }
 }

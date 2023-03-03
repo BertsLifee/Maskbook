@@ -1,5 +1,5 @@
 import { useActivatedPlugin, useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, InjectedDialogProps, useOpenShareTxDialog, NetworkTab } from '@masknet/shared'
+import { InjectedDialog, type InjectedDialogProps, useOpenShareTxDialog, NetworkTab } from '@masknet/shared'
 import { PluginID, EMPTY_LIST, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainContext,
@@ -17,16 +17,16 @@ import { useCallback, useState } from 'react'
 import Web3Utils from 'web3-utils'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
 import { activatedSocialNetworkUI } from '../../../social-network/index.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N } from '../../../utils/index.js'
-import { WalletMessages } from '../../Wallet/messages.js'
 import { ITO_MetaKey_2, MSG_DELIMITER } from '../constants.js'
 import { PluginITO_RPC } from '../messages.js'
-import { DialogTabs, JSON_PayloadInMask } from '../types.js'
+import { DialogTabs, type JSON_PayloadInMask } from '../types.js'
 import { ConfirmDialog } from './ConfirmDialog.js'
 import { CreateForm } from './CreateForm.js'
 import { payloadOutMask } from './helpers.js'
 import { PoolList } from './PoolList.js'
-import { PoolSettings, useFillCallback } from './hooks/useFill.js'
+import { type PoolSettings, useFillCallback } from './hooks/useFill.js'
 import { Icons } from '@masknet/icons'
 
 interface StyleProps {
@@ -176,7 +176,7 @@ export function CompositionDialog(props: CompositionDialogProps) {
     // #endregion
 
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
 
     // #region tabs

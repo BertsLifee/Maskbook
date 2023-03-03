@@ -1,3 +1,5 @@
+import { useCallback, useMemo } from 'react'
+import { useBoolean } from 'react-use'
 import { ChainBoundary, InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -7,8 +9,6 @@ import type { NonFungibleAsset } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
-import { useCallback, useMemo } from 'react'
-import { useBoolean } from 'react-use'
 import { pluginIDSettings } from '../../../../shared/legacy-settings/settings.js'
 import { useCreateTipsTransaction, useTip } from '../contexts/index.js'
 import { useI18N } from '../locales/index.js'
@@ -128,6 +128,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             nonFungibleTokenAddress,
             nonFungibleTokenId,
         })
+        onClose?.()
     }, [sendTip, createTipsTx, shareText, amount, tipType, token, nonFungibleTokenAddress, nonFungibleTokenId])
 
     const expectedPluginID = [NetworkPluginID.PLUGIN_EVM, NetworkPluginID.PLUGIN_SOLANA].includes(pluginID)
@@ -138,6 +139,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const pluginIDs = useValueRef(pluginIDSettings)
 
     const pluginId = site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM
+
     return (
         <TabContext value={currentTab}>
             <InjectedDialog

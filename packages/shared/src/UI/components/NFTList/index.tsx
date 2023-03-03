@@ -1,15 +1,15 @@
-import { FC, useCallback, useRef } from 'react'
+import { type FC, useCallback, useRef } from 'react'
 import { noop } from 'lodash-es'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
 import { LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { CrossIsolationMessages, NetworkPluginID } from '@masknet/shared-base'
-import { isSameAddress, NonFungibleToken } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Checkbox, List, ListItem, Radio, Stack, Typography } from '@mui/material'
 
 interface NFTItemProps {
-    token: NonFungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    token: Web3Helper.NonFungibleTokenAll
     pluginID: NetworkPluginID
 }
 
@@ -45,7 +45,7 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             gridTemplateColumns: `repeat(${columns}, 1fr)`,
         },
         nftContainer: {
-            background: theme.palette.background.default,
+            background: theme.palette.maskColor.bg,
             borderRadius: 8,
             width: 126,
             height: 154,
@@ -91,6 +91,7 @@ const useStyles = makeStyles<{ columns?: number; gap?: number }>()((theme, { col
             height: 30,
         },
         image: {
+            background: 'transparent !important',
             width: 126,
             height: 126,
         },

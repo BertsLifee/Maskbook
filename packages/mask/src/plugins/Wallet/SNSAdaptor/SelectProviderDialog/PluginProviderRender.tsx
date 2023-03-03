@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { first } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
-import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { getSiteType, type NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NetworkIconClickBaitProps, ProviderIconClickBaitProps } from '@masknet/web3-shared-base'
@@ -127,18 +127,10 @@ export interface PluginProviderRenderProps {
         provider: Web3Helper.ProviderDescriptorAll,
     ) => void
     NetworkIconClickBait?: React.ComponentType<
-        NetworkIconClickBaitProps<
-            Web3Helper.Definition[NetworkPluginID]['ChainId'],
-            Web3Helper.Definition[NetworkPluginID]['ProviderType'],
-            Web3Helper.Definition[NetworkPluginID]['NetworkType']
-        >
+        NetworkIconClickBaitProps<Web3Helper.ChainIdAll, Web3Helper.ProviderTypeAll, Web3Helper.NetworkTypeAll>
     >
     ProviderIconClickBait?: React.ComponentType<
-        ProviderIconClickBaitProps<
-            Web3Helper.Definition[NetworkPluginID]['ChainId'],
-            Web3Helper.Definition[NetworkPluginID]['ProviderType'],
-            Web3Helper.Definition[NetworkPluginID]['NetworkType']
-        >
+        ProviderIconClickBaitProps<Web3Helper.ChainIdAll, Web3Helper.ProviderTypeAll, Web3Helper.NetworkTypeAll>
     >
     supportedNetworkList?: Array<Web3Helper.NetworkDescriptorAll['type']>
 }

@@ -4,10 +4,10 @@ import { Button, Table, TableBody, TableCell, TableRow, Typography } from '@mui/
 import { makeStyles } from '@masknet/theme'
 import { useWeb3Connection, useChainContext, useNetworkContext, useWeb3 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useLog } from '@masknet/web3-logs/hooks'
+import { useTelemetry } from '@masknet/web3-telemetry/hooks'
 import { NetworkPluginID, ProofType } from '@masknet/shared-base'
 import {
-    Web3,
+    type Web3,
     ChainId,
     ChainId as EVM_ChainId,
     ProviderType as EVM_ProviderType,
@@ -17,7 +17,7 @@ import { ChainId as SolanaChainId, ProviderType as SolanaProviderType } from '@m
 import { ChainId as FlowChainId, ProviderType as FlowProviderType } from '@masknet/web3-shared-flow'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
-import { LoggerAPI } from '@masknet/web3-providers/types'
+import { TelemetryAPI } from '@masknet/web3-providers/types'
 
 export interface ConnectionContentProps {
     onClose?: () => void
@@ -35,15 +35,19 @@ export function ConnectionContent(props: ConnectionContentProps) {
     const { account, chainId } = useChainContext()
     const web3 = useWeb3()
     const connection = useWeb3Connection()
-    const log = useLog()
+    const telemetry = useTelemetry()
 
     const onCaptureEvent = useCallback(async () => {
-        log.captureEvent(LoggerAPI.EventID.Debug)
-    }, [log])
+        telemetry.captureEvent(TelemetryAPI.EventType.Debug, TelemetryAPI.EventID.Debug)
+    }, [telemetry])
 
     const onCaptureException = useCallback(async () => {
-        log.captureException(LoggerAPI.ExceptionID.Debug, new Error('A debug error.'))
-    }, [log])
+        telemetry.captureException(
+            TelemetryAPI.ExceptionType.Error,
+            TelemetryAPI.ExceptionID.Debug,
+            new Error('An error message.'),
+        )
+    }, [telemetry])
 
     const onEstimateCallback = useCallback(async () => {
         const contract = createContract<ERC20>(

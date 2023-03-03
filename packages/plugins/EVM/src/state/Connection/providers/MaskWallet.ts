@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import { ECKeyIdentifier, EMPTY_LIST, ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
+import { type ECKeyIdentifier, EMPTY_LIST, ExtensionSite, getSiteType, PopupRoutes } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, chainResolver, isValidAddress, ProviderType } from '@masknet/web3-shared-evm'
 import type { EVM_Provider } from '../types.js'
@@ -40,9 +40,10 @@ export class MaskWalletProvider extends BaseContractWalletProvider implements EV
             account: string
             identifier?: ECKeyIdentifier
         },
+        silent?: boolean,
     ) {
         const siteType = getSiteType()
-        if (siteType === ExtensionSite.Popup) {
+        if (siteType === ExtensionSite.Popup || silent) {
             if (isValidAddress(address)) {
                 await this.switchAccount(address, owner)
                 await this.switchChain(chainId)

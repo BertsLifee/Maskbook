@@ -6,10 +6,10 @@ import { SelectTokenChip, TokenSecurityBar, useSelectAdvancedSettings, useTokenS
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { InputTokenPanel } from './InputTokenPanel.js'
 import { alpha, Box, chipClasses, Collapse, IconButton, lighten, Typography } from '@mui/material'
-import { ChainId, GasConfig, GasEditor, Transaction } from '@masknet/web3-shared-evm'
-import { rightShift, multipliedBy, leftShift } from '@masknet/web3-shared-base'
+import { type ChainId, type GasConfig, GasEditor, type Transaction } from '@masknet/web3-shared-evm'
+import { rightShift, multipliedBy, isZero, ZERO, formatBalance } from '@masknet/web3-shared-base'
 import { Tune as TuneIcon } from '@mui/icons-material'
-import { TokenPanelType, TradeInfo } from '../../types/index.js'
+import { TokenPanelType, type TradeInfo } from '../../types/index.js'
 import { Icons } from '@masknet/icons'
 import { useI18N } from '../../../../utils/index.js'
 import { DefaultTraderPlaceholder, TraderInfo } from './TraderInfo.js'
@@ -231,8 +231,14 @@ export const TradeForm = memo<AllTradeFormProps>(
             const marginGasPrice = multipliedBy(gasPrice ?? 0, 1.1)
             const gasFee = multipliedBy(marginGasPrice, focusedTrade?.gas.value ?? MIN_GAS_LIMIT)
             let amount_ = new BigNumber(inputTokenBalanceAmount.toFixed() ?? 0)
-            amount_ = Others?.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_
-            return leftShift(BigNumber.max(0, amount_), inputToken?.decimals).toFixed(5)
+            amount_ = BigNumber.max(
+                0,
+                Others?.isNativeTokenSchemaType(inputToken?.schema) ? amount_.minus(gasFee) : amount_,
+            )
+
+            return isZero(amount_)
+                ? ZERO.toString()
+                : formatBalance(amount_.integerValue(), inputToken?.decimals, undefined, true)
         }, [focusedTrade, gasPrice, inputTokenTradeAmount, inputToken, Others?.isNativeTokenSchemaType])
 
         const handleAmountChange = useCallback(
@@ -310,6 +316,9 @@ export const TradeForm = memo<AllTradeFormProps>(
         // #region gas settings
         const selectAdvancedSettings = useSelectAdvancedSettings(NetworkPluginID.PLUGIN_EVM)
         const openSwapSettingDialog = useCallback(async () => {
+            PluginTraderMessages.swapSettingsUpdated.sendToAll({
+                open: true,
+            })
             const { slippageTolerance, transaction } = await selectAdvancedSettings({
                 chainId,
                 disableGasLimit: true,

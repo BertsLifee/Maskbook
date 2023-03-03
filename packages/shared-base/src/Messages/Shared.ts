@@ -15,6 +15,8 @@ import type {
     PersonaSelectPanelDialogEvent,
     AvatarSettingDialogEvent,
     OwnerDeletionEvent,
+    redpacketDialogEvent,
+    PersonaBindFinishEvent,
 } from './Mask.js'
 
 /**
@@ -38,6 +40,7 @@ export interface CrossIsolationEvents {
     checkSecurityDialogEvent: CheckSecurityDialogEvent
     checkSecurityConfirmationDialogEvent: CheckSecurityConfirmationDialogEvent
     applicationDialogEvent: ApplicationDialogEvent
+    personaBindFinished: PersonaBindFinishEvent
     swapDialogEvent: SwapDialogEvent
     settingsDialogEvent: SettingsDialogEvent
     ownerDeletionEvent: OwnerDeletionEvent
@@ -45,6 +48,7 @@ export interface CrossIsolationEvents {
     nonFungibleTokenDialogEvent: NonFungibleTokenDialogEvent
     walletSettingsDialogEvent: WalletSettingsDialogEvent
     avatarSettingDialogEvent: AvatarSettingDialogEvent
+    redpacketDialogEvent: redpacketDialogEvent
 
     /** emit when open new page . */
     openPageConfirm: OpenPageConfirmEvent

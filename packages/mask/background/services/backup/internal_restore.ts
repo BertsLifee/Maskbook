@@ -1,24 +1,26 @@
 import { delay } from '@masknet/kit'
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { activatedPluginsWorker, registeredPlugins } from '@masknet/plugin-infra/background-worker'
-import { PluginID, ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
+import { type PluginID, type ProfileIdentifier, RelationFavor } from '@masknet/shared-base'
 import { MaskMessages } from '../../../shared/messages.js'
 import {
     consistentPersonaDBWriteAccess,
     createOrUpdatePersonaDB,
     createOrUpdateProfileDB,
     createOrUpdateRelationDB,
-    LinkedProfileDetails,
+    type LinkedProfileDetails,
 } from '../../database/persona/db.js'
 import {
     withPostDBTransaction,
     createPostDB,
-    PostRecord,
+    type PostRecord,
     queryPostDB,
     updatePostDB,
 } from '../../database/post/index.js'
 import type { LatestRecipientDetailDB, LatestRecipientReasonDB } from '../../database/post/dbType.js'
 import { internal_wallet_restore } from './internal_wallet_restore.js'
+import { queryOwnedPersonaInformation } from '../identity/index.js'
+import { compact } from 'lodash-es'
 
 export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     const { plugins, posts, wallets } = backup
@@ -43,7 +45,10 @@ export async function restoreNormalizedBackup(backup: NormalizedBackup.Data) {
     await delay(backup.personas.size + backup.profiles.size)
 
     if (backup.personas.size || backup.profiles.size) MaskMessages.events.ownPersonaChanged.sendToAll(undefined)
-    MaskMessages.events.restoreSuccess.sendToAll({ wallets })
+    const personas = await queryOwnedPersonaInformation(true)
+    MaskMessages.events.restoreSuccess.sendToAll({
+        wallets: compact([...wallets.map((x) => x.address), ...personas.map((x) => x.address)]),
+    })
 }
 
 async function restorePersonas(backup: NormalizedBackup.Data) {
@@ -145,7 +150,7 @@ function restorePosts(backup: Iterable<NormalizedBackup.PostBackup>) {
             const rec: PostRecord = {
                 identifier: post.identifier,
                 foundAt: post.foundAt,
-                postBy: post.postBy,
+                postBy: post.postBy.unwrapOr(undefined),
                 recipients: 'everyone',
             }
             if (post.encryptBy.some) rec.encryptBy = post.encryptBy.val
@@ -198,6 +203,7 @@ async function restorePlugins(backup: NormalizedBackup.Data['plugins']) {
             continue
         }
         works.add(
+            // eslint-disable-next-line @typescript-eslint/no-loop-func
             (async () => {
                 const x = await f(item)
                 if (x.err) console.error(`[@masknet/plugin-infra] Plugin ${plugin} failed to restore its backup.`, item)

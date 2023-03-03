@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useFungibleToken, useNetworkContext } from '@masknet/web3-hooks-base'
-import { Trader, TraderProps } from './Trader.js'
+import { Trader, type TraderProps } from './Trader.js'
 import { AllProviderTradeContext } from '../../trader/useAllProviderTradeContext.js'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 
@@ -38,7 +38,7 @@ export function TradeView(props: TradeViewProps) {
         pluginID,
         TraderProps.defaultOutputCoin?.address ?? '',
         TraderProps.defaultOutputCoin,
-        { chainId },
+        { chainId: TraderProps.defaultOutputCoin?.chainId ?? chainId },
     )
 
     const { classes } = useStyles(undefined, { props })
@@ -49,6 +49,7 @@ export function TradeView(props: TradeViewProps) {
                     {...TraderProps}
                     defaultOutputCoin={isNativeTokenAddress(outputToken?.address) ? undefined : outputToken}
                     defaultInputCoin={inputToken}
+                    chainId={chainId}
                     classes={{ root: classes.trade }}
                     settings
                 />

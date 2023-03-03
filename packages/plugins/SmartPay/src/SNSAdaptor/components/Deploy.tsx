@@ -15,13 +15,14 @@ import { useI18N } from '../../locales/index.js'
 import { ManagePopover } from './ManagePopover.js'
 import { SmartPayBanner } from './SmartPayBanner.js'
 import { ActionButton, LoadingBase, makeStyles } from '@masknet/theme'
-import { ManagerAccount, ManagerAccountType } from '../../type.js'
+import { type ManagerAccount, ManagerAccountType } from '../../type.js'
 
 import { CreateSuccessDialog } from './CreateSuccessDialog.js'
 import { RoutePaths } from '../../constants.js'
 import { useDeploy } from '../../hooks/useDeploy.js'
 import { useManagers } from '../../hooks/useManagers.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
+import { isSameAddress } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     walletDescription: {
@@ -146,8 +147,8 @@ export function Deploy({ open }: { open: boolean }) {
     const { value, loading: queryContractLoading } = useAsync(async () => {
         if (!manager?.address || !open || !chainId) return
 
-        const accounts = await SmartPayOwner.getAccountsByOwners(chainId, [manager?.address], false)
-        const nonce = accounts.filter((x) => x.deployed).length
+        const accounts = await SmartPayOwner.getAccountsByOwner(chainId, manager.address, false)
+        const nonce = accounts.filter((x) => x.deployed && isSameAddress(manager.address, x.creator)).length
 
         return {
             account: accounts[nonce],
@@ -217,7 +218,7 @@ export function Deploy({ open }: { open: boolean }) {
                         </Box>
                         <Box display="flex" flexDirection="column" justifyContent="space-between">
                             <Typography lineHeight="18px" fontWeight={700}>
-                                Smart Pay {nonce ?? 0 + 1}
+                                SmartPay Wallet {nonce ?? 0 + 1}
                             </Typography>
 
                             <Typography className={classes.address}>

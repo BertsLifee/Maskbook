@@ -1,8 +1,8 @@
 import {
-    Dispatch,
-    FC,
+    type Dispatch,
+    type FC,
     memo,
-    SetStateAction,
+    type SetStateAction,
     useCallback,
     useContext,
     useEffect,
@@ -12,19 +12,20 @@ import {
 } from 'react'
 import { useSubscription } from 'use-subscription'
 import { useFungibleToken, useNonFungibleTokenContract, useChainContext } from '@masknet/web3-hooks-base'
-import { isSameAddress, SocialAccount, TokenType } from '@masknet/web3-shared-base'
+import { isSameAddress, type SocialAccount, TokenType } from '@masknet/web3-shared-base'
 import type { ChainId, GasConfig } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getStorage } from '../../storage/index.js'
 import type { TipTask } from '../../types/index.js'
-import { TipContextOptions, TipContext } from './TipContext.js'
+import { type TipContextOptions, TipContext } from './TipContext.js'
 import { useTipAccountsCompletion } from './useTipAccountsCompletion.js'
 import { useNftTip } from './useNftTip.js'
 import { useTokenTip } from './useTokenTip.js'
 import { useRecipientValidate } from './useRecipientValidate.js'
 import { useTipValidate } from './useTipValidate.js'
 import { TargetRuntimeContext } from '../TargetRuntimeContext.js'
+import { useAvailableBalance } from '@masknet/shared'
 
 interface Props {
     task: TipTask
@@ -56,6 +57,7 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     const { targetPluginID, setTargetPluginID } = TargetRuntimeContext.useContainer()
     const { chainId: targetChainId } = useChainContext()
 
+    const [gasOption, setGasOption] = useState<GasConfig>()
     const [_recipientAddress, setRecipient] = useState(task.recipient ?? '')
     const recipients = useRecipients(targetPluginID, task.accounts)
     const [tipType, setTipType] = useState(TokenType.Fungible)
@@ -83,13 +85,26 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
     }, [nativeTokenDetailed, setToken])
     const token = tokenMap[key] ?? nativeTokenDetailed
 
+    // #region balance
+    const { isAvailableBalance, balance, isAvailableGasBalance } = useAvailableBalance(token?.address, gasOption, {
+        chainId: targetChainId,
+    })
+
+    // #endregion
+
     const [nonFungibleTokenId, setNonFungibleTokenId] = useState<TipContextOptions['nonFungibleTokenId']>(null)
     const storedTokens = useSubscription(getStorage().addedTokens.subscription)
-    const validation = useTipValidate({ tipType, amount, token, nonFungibleTokenId, nonFungibleTokenAddress })
+    const validation = useTipValidate({
+        tipType,
+        amount,
+        token,
+        nonFungibleTokenId,
+        nonFungibleTokenAddress,
+        isAvailableGasBalance,
+    })
 
     const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(targetPluginID, nonFungibleTokenAddress)
 
-    const [gasOption, setGasOption] = useState<GasConfig>()
     const connectionOptions =
         targetPluginID === NetworkPluginID.PLUGIN_EVM
             ? {
@@ -156,6 +171,9 @@ export const TipTaskProvider: FC<React.PropsWithChildren<Props>> = memo(({ child
             validation,
             validatingRecipient,
             recipientValidation,
+            isAvailableBalance,
+            isAvailableGasBalance,
+            balance,
         }
     }, [
         targetChainId,

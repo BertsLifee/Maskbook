@@ -1,4 +1,4 @@
-import { createEmptyNormalizedBackup, NormalizedBackup } from '@masknet/backup-format'
+import { createEmptyNormalizedBackup, type NormalizedBackup } from '@masknet/backup-format'
 import type { PersonaIdentifier } from '@masknet/shared-base'
 import { None, Some } from 'ts-results-es'
 import { queryPersonasDB, queryProfilesDB, queryRelations } from '../../database/persona/db.js'
@@ -71,6 +71,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
                       })
                     : None,
                 linkedProfiles: persona.linkedProfiles,
+                address: persona.address ? Some(persona.address) : None,
             })
         }
     }
@@ -94,7 +95,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
                 identifier: post.identifier,
                 foundAt: post.foundAt,
                 interestedMeta: post.interestedMeta || new Map(),
-                postBy: post.postBy,
+                postBy: post.postBy ? Some(post.postBy) : None,
                 encryptBy: post.encryptBy ? Some(post.encryptBy) : None,
                 postCryptoKey: post.postCryptoKey ? Some(post.postCryptoKey) : None,
                 summary: post.summary ? Some(post.summary) : None,
@@ -139,7 +140,7 @@ export async function createNewBackup(options: InternalBackupOptions): Promise<N
         const plugins = Object.create(null) as Record<string, unknown>
         const allPlugins = [...activatedPluginsWorker]
 
-        async function backup(plugin: typeof allPlugins[0]): Promise<void> {
+        async function backup(plugin: (typeof allPlugins)[0]): Promise<void> {
             const backupCreator = plugin.backup?.onBackup
             if (!backupCreator) return
 

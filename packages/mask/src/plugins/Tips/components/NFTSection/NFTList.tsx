@@ -1,4 +1,4 @@
-import { FC, useCallback } from 'react'
+import { type FC, useCallback } from 'react'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
@@ -10,7 +10,7 @@ import type { TipNFTKeyPair } from '../../types/index.js'
 
 interface Props {
     selectedPairs: TipNFTKeyPair[]
-    tokens: Array<Web3Helper.NonFungibleAssetScope<'all'>>
+    tokens: Web3Helper.NonFungibleAssetAll[]
     onChange?: (id: string | null, contractAddress?: string) => void
     limit?: number
     className: string

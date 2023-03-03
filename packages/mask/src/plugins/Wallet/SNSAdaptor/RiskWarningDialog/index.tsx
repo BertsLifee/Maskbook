@@ -4,11 +4,11 @@ import { InjectedDialog, ActionButtonPromise } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { isDashboardPage, NetworkPluginID } from '@masknet/shared-base'
+import { isDashboardPage, type NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { useWeb3State } from '@masknet/web3-hooks-base'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useI18N, useMatchXS } from '../../../../utils/index.js'
-import { WalletMessages } from '../../messages.js'
 import { WalletStatusBox } from '../../../../components/shared/WalletStatusBox/index.js'
 
 const useStyles = makeStyles()((theme) => ({

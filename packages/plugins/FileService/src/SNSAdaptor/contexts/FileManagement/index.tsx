@@ -5,11 +5,11 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { noop, omit } from 'lodash-es'
 import {
     createContext,
-    Dispatch,
-    FC,
+    type Dispatch,
+    type FC,
     memo,
-    PropsWithChildren,
-    SetStateAction,
+    type PropsWithChildren,
+    type SetStateAction,
     useCallback,
     useContext,
     useMemo,
@@ -151,7 +151,7 @@ export const FileManagementProvider: FC<Props> = memo(({ children, compositionTy
     )
 
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
     const attachToPost = useCallback(
         (fileInfo: FileInfo | FileInfo[]) => {

@@ -1,9 +1,8 @@
 import { useCallback } from 'react'
 import { useAsyncRetry } from 'react-use'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { SearchResultType, SocialIdentity } from '@masknet/web3-shared-base'
+import { SearchResultType, type SocialIdentity } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
 import { DSearch } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -18,6 +17,7 @@ export function TagInspector(props: TagInspectorProps) {
         (
             name?: string,
             type?: TrendingAPI.TagType,
+            currentResult?: Web3Helper.TokenResultAll,
             setActive?: (x: boolean) => void,
             badgeBounding?: DOMRect,
             identity?: SocialIdentity,
@@ -28,6 +28,7 @@ export function TagInspector(props: TagInspectorProps) {
             return (
                 <TrendingViewWrapper
                     address={address}
+                    currentResult={currentResult}
                     identity={identity}
                     setActive={setActive}
                     badgeBounding={badgeBounding}
@@ -41,7 +42,7 @@ export function TagInspector(props: TagInspectorProps) {
         [],
     )
     return (
-        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM, chainId: ChainId.Mainnet }}>
+        <Web3ContextProvider value={{ pluginID: NetworkPluginID.PLUGIN_EVM }}>
             <TrendingPopper>{createTrendingView}</TrendingPopper>
         </Web3ContextProvider>
     )
@@ -50,6 +51,7 @@ export function TagInspector(props: TagInspectorProps) {
 interface TrendingViewWrapperProps {
     name?: string
     type?: TrendingAPI.TagType
+    currentResult?: Web3Helper.TokenResultAll
     setActive?: (x: boolean) => void
     badgeBounding?: DOMRect
     identity?: SocialIdentity
@@ -62,6 +64,7 @@ function TrendingViewWrapper({
     name,
     type,
     reposition,
+    currentResult,
     setActive,
     badgeBounding,
     address,
@@ -80,12 +83,14 @@ function TrendingViewWrapper({
 
     return (
         <TrendingViewProvider
+            isDSearch={false}
             isCollectionProjectPopper={Boolean(isCollectionProjectPopper)}
             badgeBounding={badgeBounding}
             isProfilePage={false}
             isTokenTagPopper={!isCollectionProjectPopper}
             isPreciseSearch={false}>
             <TrendingView
+                currentResult={currentResult}
                 resultList={resultList}
                 onUpdate={reposition}
                 address={address}

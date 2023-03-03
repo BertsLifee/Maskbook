@@ -43,7 +43,8 @@ import { FlowFungibleAPI } from './Flow/index.js'
 import { CloudflareAPI } from './Cloudflare/index.js'
 import { MirrorAPI } from './Mirror/index.js'
 import { MindsAPI } from './Minds/index.js'
-import { FuseTrendingAPI } from './Fuse/index.js'
+import { FuseAPI, FuseCoinAPI } from './Fuse/index.js'
+import { FuseNonFungibleCollectionAPI } from './Fuse/apis/NonFungibleCollection.js'
 import { CryptoScamDB_API } from './CryptoScamDB/index.js'
 import { SmartPayAccountAPI, SmartPayBundlerAPI, SmartPayFunderAPI } from './SmartPay/index.js'
 import { NomicsAPI } from './Nomics/index.js'
@@ -54,7 +55,7 @@ import { Web3SignerAPI } from './EVM/apis/Web3SignerAPI.js'
 import { FlowWeb3API } from './Flow/apis/Web3API.js'
 import { SolanaWeb3API } from './Solana/apis/Web3API.js'
 import { SentryAPI } from './Sentry/index.js'
-import { TheGraphDomainAPI } from './TheGraph/index.js'
+import { TheGraphDomainAPI, TheGraphRedPacketAPI } from './TheGraph/index.js'
 import { ENS_API } from './ENS/index.js'
 import { SpaceID_API } from './SpaceID/index.js'
 import { BonfidaAPI } from './Bonfida/index.js'
@@ -92,6 +93,7 @@ export const Lens = new LensAPI()
 export const Sentry = new SentryAPI()
 export const TheGraphDomain = new TheGraphDomainAPI()
 export const RedPacket = new RedPacketAPI()
+export const TheGraphRedPacket = new TheGraphRedPacketAPI()
 
 // Etherscan
 export const EtherscanExplorer = new EtherscanExplorerAPI()
@@ -162,7 +164,9 @@ export const ZerionTrending = new ZerionTrendingAPI()
 export const ZerionGas = new ZerionGasAPI()
 
 // Fuse
-export const FuseTrending = new FuseTrendingAPI()
+export const Fuse = new FuseAPI()
+export const FuseCoin = new FuseCoinAPI()
+export const FuseNonFungibleCollection = new FuseNonFungibleCollectionAPI()
 
 // Smart Pay
 export const SmartPayBundler = new SmartPayBundlerAPI()

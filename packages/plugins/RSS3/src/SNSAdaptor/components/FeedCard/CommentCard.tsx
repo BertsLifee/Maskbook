@@ -5,7 +5,7 @@ import { Typography } from '@mui/material'
 import type { FC } from 'react'
 import { Translate, useI18N } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
-import { CardFrame, FeedCardProps } from '../base.js'
+import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { Label } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
@@ -120,13 +120,12 @@ export const CommentCard: FC<CommentCardProps> = ({ feed, ...rest }) => {
                 {commentTarget?.media?.[0].mime_type?.startsWith('image/') ? (
                     <Image
                         classes={{ container: classes.image }}
-                        optimistic
                         src={commentTarget.media[0].address}
                         height={imageSize}
                         width={imageSize}
                     />
                 ) : null}
-                <div className={classes.article}>
+                <div>
                     {commentTarget?.title ? (
                         <Typography variant="h1" className={classes.title}>
                             {commentTarget?.title}

@@ -1,4 +1,4 @@
-import { Card, CardContent, CardProps } from '@mui/material'
+import { Card, CardContent, type CardProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => {
@@ -8,6 +8,9 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             borderRadius: 0,
             overflow: 'auto',
+            '::-webkit-scrollbar': {
+                display: 'none',
+            },
         },
         overContent: {
             backgroundColor: theme.palette.maskColor.white,

@@ -4,7 +4,7 @@ import { useChainContext, useBalance, useWeb3, useNativeToken, useNativeTokenAdd
 import {
     chainResolver,
     explorerResolver,
-    GasConfig,
+    type GasConfig,
     isNativeTokenAddress,
     useRedPacketConstants,
 } from '@masknet/web3-shared-evm'
@@ -13,7 +13,7 @@ import { makeStyles, ActionButton } from '@masknet/theme'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { FormattedBalance, useOpenShareTxDialog, PluginWalletStatusBar, ChainBoundary } from '@masknet/shared'
 import { useI18N } from '../locales/index.js'
-import { RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
+import { type RedPacketSettings, useCreateCallback, useCreateParams } from './hooks/useCreateCallback.js'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
@@ -85,7 +85,11 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
     // #region amount minus estimate gas fee
     const { value: createParams } = useCreateParams(settings!, contract_version, publicKey)
     const isNativeToken = isSameAddress(settings?.token?.address, nativeTokenAddress)
-    const { transactionValue, estimateGasFee } = useTransactionValue(settings?.total, createParams?.gas)
+    const { transactionValue, estimateGasFee } = useTransactionValue(
+        settings?.total,
+        createParams?.gas,
+        gasOption?.gasCurrency,
+    )
     const isWaitGasBeMinus = (!estimateGasFee || loadingBalance) && isNativeToken
     const isBalanceInsufficient = new BigNumber(transactionValue).isLessThanOrEqualTo(0)
     const total = isNativeToken ? (isBalanceInsufficient ? '0' : transactionValue) : (settings?.total as string)
@@ -272,7 +276,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </Grid>
                 <Grid item xs={12}>
                     <Paper className={classes.hit}>
-                        <Typography variant="body1" align="center" style={{ lineHeight: '20px' }}>
+                        <Typography variant="body1" align="left" style={{ lineHeight: '20px' }}>
                             {t.hint()}
                         </Typography>
                     </Paper>

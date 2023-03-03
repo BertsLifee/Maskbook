@@ -4,7 +4,7 @@ import * as ABICoder from 'web3-eth-abi'
 import type { WalletProxy } from '@masknet/web3-contracts/types/WalletProxy.js'
 import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
-import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.js'
+import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.mjs'
 import { createContract } from '../helpers/transaction.js'
 import { getSmartPayConstants, ZERO_ADDRESS } from '../constants/index.js'
 import type { ChainId } from '../types/index.js'
@@ -33,9 +33,19 @@ export class ContractWallet {
      * Encoded initialize parameters of ContractWallet
      */
     private get data() {
-        const { PAYMASTER_CONTRACT_ADDRESS, PAYMASTER_MINIMAL_STAKE_AMOUNT, PAYMENT_TOKEN_ADDRESS } =
-            getSmartPayConstants(this.chainId)
-        if (!PAYMASTER_CONTRACT_ADDRESS || !PAYMASTER_MINIMAL_STAKE_AMOUNT || !PAYMENT_TOKEN_ADDRESS) return
+        const {
+            PAYMASTER_MASK_CONTRACT_ADDRESS,
+            PAYMASTER_NATIVE_CONTRACT_ADDRESS,
+            PAYMASTER_MINIMAL_STAKE_AMOUNT,
+            PAYMENT_TOKEN_ADDRESS,
+        } = getSmartPayConstants(this.chainId)
+        if (
+            !PAYMASTER_MASK_CONTRACT_ADDRESS ||
+            !PAYMASTER_NATIVE_CONTRACT_ADDRESS ||
+            !PAYMASTER_MINIMAL_STAKE_AMOUNT ||
+            !PAYMENT_TOKEN_ADDRESS
+        )
+            return
 
         const abi = WalletABI.find((x) => x.name === 'initialize' && x.type === 'function')
         if (!abi) throw new Error('Failed to load ABI.')
@@ -44,8 +54,9 @@ export class ContractWallet {
             this.entryPoint,
             this.owner,
             PAYMENT_TOKEN_ADDRESS,
-            PAYMASTER_CONTRACT_ADDRESS,
+            PAYMASTER_MASK_CONTRACT_ADDRESS,
             PAYMASTER_MINIMAL_STAKE_AMOUNT,
+            PAYMASTER_NATIVE_CONTRACT_ADDRESS,
         ])
     }
 

@@ -1,4 +1,4 @@
-import { useCallback, useState, MouseEventHandler } from 'react'
+import { useCallback, useState, type MouseEventHandler } from 'react'
 import { useAsync } from 'react-use'
 import type { Web3 } from '@masknet/web3-shared-evm'
 import { useChainContext, useWeb3 } from '@masknet/web3-hooks-base'
@@ -14,16 +14,16 @@ import { makeTypedMessageText } from '@masknet/typed-message'
 import { useI18N } from '../locales/index.js'
 import { META_KEY } from '../constants.js'
 import { useCurrentIdentity, useCurrentLinkedPersona } from '../../../components/DataSource/useActivatedUI.js'
-import { PluginReferralMessages, SelectTokenUpdated, ReferralRPC } from '../messages.js'
+import { PluginReferralMessages, type SelectTokenUpdated, ReferralRPC } from '../messages.js'
 import { getRequiredChainId } from '../helpers/index.js'
 import { singAndPostProofOfRecommendationOrigin } from './utils/proofOfRecommendation.js'
 import {
-    ReferralMetaData,
+    type ReferralMetaData,
     TabsReferAndBuy,
     TransactionStatus,
-    PageInterface,
+    type PageInterface,
     PagesType,
-    FungibleTokenDetailed,
+    type FungibleTokenDetailed,
 } from '../types.js'
 
 import { MyRewards } from './MyRewards/index.js'
@@ -56,7 +56,7 @@ export function ReferToFarm(props: PageInterface) {
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const requiredChainId = getRequiredChainId(currentChainId)
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
     const currentIdentity = useCurrentIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()

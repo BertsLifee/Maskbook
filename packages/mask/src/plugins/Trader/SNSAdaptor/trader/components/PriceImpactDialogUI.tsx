@@ -1,7 +1,7 @@
 import { memo } from 'react'
 import type { BigNumber } from 'bignumber.js'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { InjectedDialog, InjectedDialogProps } from '@masknet/shared'
+import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import {
     alpha,
     Button,
@@ -105,7 +105,6 @@ export const PriceImpactDialogUI = memo<PriceImpactDialogProps>(
                                 lostSymbol: `${lostToken.replace('<', '&lt;')} ${symbol}`,
                                 lostValue: `${lostValue.replace('<', '&lt;')} USD`,
                             }}
-                            shouldUnescape
                         />
                     </Typography>
                 </DialogContent>

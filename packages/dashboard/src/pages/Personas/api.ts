@@ -1,5 +1,5 @@
+/// <reference types="react/next" />
 import { use, cache } from 'react'
-import type {} from 'react/next'
 import { noop } from 'lodash-es'
 import { ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
@@ -34,7 +34,6 @@ export const usePersonaAvatar = createHook(
     },
 )
 export const useLanguage = createHook(Services.Settings.getLanguage, Messages.events.languageSettings.on)
-export const useLog = createHook(Services.Settings.getLog, Messages.events.logSettings.on)
 
 // Do not move or export this function.
 // This function should not be encouraged to use everywhere

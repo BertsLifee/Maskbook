@@ -10,15 +10,15 @@ import {
 import type { FungibleTokenAPI, NonFungibleTokenAPI, PriceAPI } from '@masknet/web3-providers/types'
 import {
     attemptUntil,
-    CurrencyType,
-    GasOptionType,
-    HubIndicator,
-    HubOptions,
-    Pageable,
+    type CurrencyType,
+    type GasOptionType,
+    type HubIndicator,
+    type HubOptions,
+    type Pageable,
     SourceType,
-    Transaction,
+    type Transaction,
 } from '@masknet/web3-shared-base'
-import { ChainId, GasOption, SchemaType } from '@masknet/web3-shared-solana'
+import { ChainId, type GasOption, type SchemaType } from '@masknet/web3-shared-solana'
 import type { SolanaHub } from './types.js'
 import { Web3StateSettings } from '../../settings/index.js'
 
@@ -27,7 +27,7 @@ class HubFungibleClient extends HubStateFungibleClient<ChainId, SchemaType> {
         const options = this.getOptions(initial)
 
         // only the first page is available
-        if ((options.indicator ?? 0) > 0) return []
+        if ((options.indicator?.index ?? 0) > 0) return []
 
         return this.getPredicateProviders<FungibleTokenAPI.Provider<ChainId, SchemaType> | PriceAPI.Provider<ChainId>>(
             {

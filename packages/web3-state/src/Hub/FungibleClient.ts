@@ -1,14 +1,14 @@
 import {
-    HubOptions,
+    type HubOptions,
     attemptUntil,
-    Pageable,
+    type Pageable,
     createPageable,
     createIndicator,
-    HubIndicator,
-    FungibleTokenSecurity,
-    FungibleToken,
-    FungibleAsset,
-    FungibleTokenSpender,
+    type HubIndicator,
+    type FungibleTokenSecurity,
+    type FungibleToken,
+    type FungibleAsset,
+    type FungibleTokenSpender,
 } from '@masknet/web3-shared-base'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type {
@@ -125,6 +125,19 @@ export class HubStateFungibleClient<ChainId, SchemaType> extends HubStateBaseCli
         const providers = this.getProviders(initial)
         return attemptUntil(
             providers.map((x) => () => x.getAssets?.(options.account, options)),
+            createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+        )
+    }
+
+    async getTrustedFungibleAssets(
+        account: string,
+        trustedFungibleTokens?: Array<FungibleToken<ChainId, SchemaType>>,
+        initial?: HubOptions<ChainId>,
+    ): Promise<Pageable<FungibleAsset<ChainId, SchemaType>>> {
+        const options = this.getOptions(initial, { account })
+        const providers = this.getProviders(initial)
+        return attemptUntil(
+            providers.map((x) => () => x.getTrustedAssets?.(options.account, trustedFungibleTokens, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
         )
     }

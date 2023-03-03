@@ -1,14 +1,14 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { ProviderState } from '@masknet/web3-state'
-import { ECKeyIdentifier, mapSubscription, mergeSubscription } from '@masknet/shared-base'
-import { Account, isSameAddress } from '@masknet/web3-shared-base'
+import { type ECKeyIdentifier, mapSubscription, mergeSubscription } from '@masknet/shared-base'
+import { type Account, isSameAddress } from '@masknet/web3-shared-base'
 import {
-    ChainId,
+    type ChainId,
     isValidAddress,
     NetworkType,
     ProviderType,
-    Web3,
-    Web3Provider,
+    type Web3,
+    type Web3Provider,
     chainResolver,
     isValidChainId,
     getInvalidChainId,
@@ -56,6 +56,7 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             account: string
             identifier?: ECKeyIdentifier
         },
+        silent?: boolean,
     ): Promise<Account<ChainId>> {
         // Disconnect WalletConnect, prevents its session lasting too long.
         if (providerType !== ProviderType.WalletConnect && this.providers[ProviderType.WalletConnect].connected) {
@@ -66,6 +67,6 @@ export class Provider extends ProviderState<ChainId, ProviderType, NetworkType, 
             }
         }
 
-        return super.connect(providerType, chainId, address, owner)
+        return super.connect(providerType, chainId, address, owner, silent)
     }
 }

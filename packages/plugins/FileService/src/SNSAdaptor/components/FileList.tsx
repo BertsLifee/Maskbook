@@ -1,12 +1,12 @@
 import { List, ListItem, Typography } from '@mui/material'
 import { makeStyles, Boundary, useCustomSnackbar } from '@masknet/theme'
 import type { FileInfo } from '../../types.js'
-import { FC, HTMLProps, useCallback, useRef } from 'react'
+import { type FC, type HTMLProps, useCallback, useRef } from 'react'
 import {
     DisplayingFile,
-    DisplayingFileProps,
+    type DisplayingFileProps,
     ManageableFile,
-    ManageableFileProps,
+    type ManageableFileProps,
     SelectableFile,
     UploadingFile,
 } from './Files/index.js'
@@ -115,7 +115,7 @@ export const FileList: FC<FileListProps> = ({ files, onLoadMore, className, onDo
             <Boundary>
                 <List className={classes.list} classes={{ root: classes.listRoot }}>
                     {files.map((file) => (
-                        <ListItem key={file.id} className={classes.listItem} classes={{ root: classes.itemRoot }}>
+                        <ListItem key={file.id} className={classes.listItem}>
                             {uploadStateMap[file.id] ? (
                                 <UploadingFile
                                     className={classes.file}
@@ -178,8 +178,7 @@ export const SelectableFileList: FC<SelectableFileListProps> = ({
                         return (
                             <ListItem
                                 key={file.id}
-                                className={cx(classes.listItem, disabled ? classes.disabled : null)}
-                                classes={{ root: classes.itemRoot }}>
+                                className={cx(classes.listItem, disabled ? classes.disabled : null)}>
                                 <SelectableFile
                                     disabled={disabled}
                                     className={classes.file}
@@ -213,7 +212,7 @@ export const DisplayingFileList: FC<DisplayingFileFileListProps> = ({
         <section className={cx(classes.container, className)} {...rest}>
             <List className={classes.list} classes={{ root: classes.listRoot }}>
                 {files.map((file) => (
-                    <ListItem key={file.id} className={classes.listItem} classes={{ root: classes.itemRoot }}>
+                    <ListItem key={file.id} className={classes.listItem}>
                         <DisplayingFile className={classes.file} file={file} onSave={onSave} onDownload={onDownload} />
                     </ListItem>
                 ))}

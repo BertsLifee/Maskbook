@@ -1,14 +1,13 @@
 import { first } from 'lodash-es'
 import {
-    ChainId,
+    type ChainId,
     ContractWallet,
-    Signer,
-    Transaction,
-    UserOperation,
+    type Signer,
+    type Transaction,
+    type UserOperation,
     UserTransaction,
     getSmartPayConstants,
     isEmptyHex,
-    isNativeTokenAddress,
     isValidAddress,
 } from '@masknet/web3-shared-evm'
 import type { ECKeyIdentifier, NetworkPluginID } from '@masknet/shared-base'
@@ -55,42 +54,34 @@ export class SmartPayAccountAPI implements AbstractAccountAPI.Provider<NetworkPl
         userTransaction: UserTransaction,
         signer: Signer<ECKeyIdentifier> | Signer<string>,
     ) {
-        const web3 = this.web3.getWeb3(chainId)
+        const getOverrides = async () => {
+            if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
+                const accounts = await this.owner.getAccountsByOwner(chainId, owner, false)
+                const target = accounts.find((x) => isSameAddress(x.address, userTransaction.operation.sender))
+                const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
 
-        if (isValidAddress(userTransaction.paymentToken) && !isNativeTokenAddress(userTransaction.paymentToken)) {
-            const getOverrides = async () => {
-                if (isEmptyHex(userTransaction.initCode) && userTransaction.nonce === 0) {
-                    const accounts = await this.owner.getAccountsByOwner(chainId, owner, false)
-                    const accountsDeployed = accounts.filter((x) => isSameAddress(x.creator, owner) && x.deployed)
+                // If the wallet to which the transaction is sent is obtained by changing the owner
+                if (!target?.creator) {
+                    return
+                }
 
-                    if (!accountsDeployed.length) {
-                        return {
-                            initCode: await this.getInitCode(chainId, owner),
-                            nonce: accountsDeployed.length,
-                        }
+                if (!accountsDeployed.length) {
+                    return {
+                        initCode: await this.getInitCode(chainId, owner),
+                        nonce: accountsDeployed.length,
                     }
                 }
-                return
             }
-
-            await userTransaction.fillUserOperation(web3, await getOverrides())
-            return this.bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
-        } else {
-            await userTransaction.fillTransaction(web3)
-            return this.web3.sendSignedTransaction(chainId, await userTransaction.signTransaction(web3, signer))
+            return
         }
+
+        await userTransaction.fillUserOperation(this.web3.getWeb3(chainId), await getOverrides())
+        return this.bundler.sendUserOperation(chainId, await userTransaction.signUserOperation(signer))
     }
 
     private async estimateUserTransaction(chainId: ChainId, userTransaction: UserTransaction) {
-        const web3 = this.web3.getWeb3(chainId)
-
-        if (userTransaction.paymentToken && !isNativeTokenAddress(userTransaction.paymentToken)) {
-            await userTransaction.fillUserOperation(web3)
-            return userTransaction.estimateUserOperation()
-        } else {
-            await userTransaction.fillTransaction(web3)
-            return userTransaction.estimateTransaction()
-        }
+        await userTransaction.fillUserOperation(this.web3.getWeb3(chainId))
+        return userTransaction.estimateUserOperation()
     }
 
     async sendTransaction(

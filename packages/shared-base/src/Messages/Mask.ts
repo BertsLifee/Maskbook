@@ -14,7 +14,7 @@ export type PersonaSelectPanelDialogEvent = {
 
 export interface MaskSettingsEvents {
     appearanceSettings: Appearance
-    logSettings: boolean
+    telemetrySettings: boolean
     pluginIDSettings: Record<EnhanceableSite | ExtensionSite, NetworkPluginID>
     languageSettings: LanguageOptions
     currentPersonaIdentifier: string
@@ -105,6 +105,10 @@ export type ApplicationDialogEvent = {
     pluginID: string
 }
 
+export type PersonaBindFinishEvent = {
+    pluginID?: string
+}
+
 export type AvatarSettingDialogEvent = {
     open: boolean
     startPicking?: boolean
@@ -126,6 +130,7 @@ export type ProfileCardEvent =
     | {
           open: true
           userId: string
+          address?: string
           badgeBounding: DOMRect
           openFromTrendingCard?: boolean
       }
@@ -160,10 +165,11 @@ export interface SettingsUpdateEvent {
 }
 
 export interface RestoreSuccessEvent {
-    wallets?: Array<{
-        address: string
-        name: string
-    }>
+    wallets: string[]
+}
+
+export interface redpacketDialogEvent {
+    open: boolean
 }
 
 export interface OwnerDeletionEvent {

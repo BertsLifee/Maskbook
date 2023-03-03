@@ -3,13 +3,13 @@ import { range } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ElementAnchor } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
+import { ScopedDomainsContainer, useReverseAddress, useWeb3State } from '@masknet/web3-hooks-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Box, Skeleton, Typography } from '@mui/material'
 import { useI18N } from '../locales/index.js'
 import { FeedCard } from './components/index.js'
 import { FeedDetailsProvider } from './contexts/FeedDetails.js'
-import { FeedOwnerContext, FeedOwnerOptions } from './contexts/index.js'
+import { FeedOwnerContext, type FeedOwnerOptions } from './contexts/index.js'
 import { useFeeds } from './hooks/useFeeds.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -37,10 +37,12 @@ export const FeedsPage = memo(function FeedsPage({ address, tag }: FeedPageProps
 
     const { feeds, loading: loadingFeeds, next } = useFeeds(address, tag)
 
-    const { value: name, loading: loadingENS } = useReverseAddress(undefined, address)
+    const { value: reversedName, loading: loadingENS } = useReverseAddress(undefined, address)
+    const { getDomain } = ScopedDomainsContainer.useContainer()
 
     const loading = loadingFeeds || loadingENS
 
+    const name = address ? getDomain(address) || reversedName : reversedName
     const feedOwner = useMemo((): FeedOwnerOptions | undefined => {
         if (!address) return
         const showDomain = !!name && !!Others?.formatDomainName

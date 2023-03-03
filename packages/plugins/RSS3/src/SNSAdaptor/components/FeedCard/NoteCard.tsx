@@ -3,10 +3,10 @@ import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
-import { FC, useCallback } from 'react'
+import { type FC, useCallback } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
-import { CardFrame, FeedCardProps } from '../base.js'
+import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { Label } from './common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
@@ -148,7 +148,6 @@ export const NoteCard: FC<NoteCardProps> = ({ feed, className, ...rest }) => {
                 {metadata?.media?.[0].mime_type.startsWith('image/') ? (
                     <Image
                         classes={{ container: classes.image }}
-                        optimistic
                         src={metadata.media[0].address}
                         height={imageSize}
                         width={imageSize}

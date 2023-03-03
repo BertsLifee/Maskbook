@@ -1,13 +1,13 @@
 import { Suspense, useMemo } from 'react'
-import { StyledEngineProvider, Theme } from '@mui/material'
+import { StyledEngineProvider, type Theme } from '@mui/material'
 import { EnvironmentContextProvider, Web3ContextProvider } from '@masknet/web3-hooks-base'
-import { LogContextProvider } from '@masknet/web3-logs/hooks'
+import { TelemetryProvider } from '@masknet/web3-telemetry/hooks'
 import { I18NextProviderHMR, SharedContextProvider, SubscriptionProvider } from '@masknet/shared'
 import { CSSVariableInjector, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
 import { ErrorBoundary, BuildInfo, useValueRef } from '@masknet/shared-base-ui'
 import { compose, getSiteType, i18NextInstance, NetworkPluginID } from '@masknet/shared-base'
 import { buildInfoMarkdown } from './utils/BuildInfoMarkdown.js'
-import { pluginIDSettings } from './../shared/legacy-settings/settings.js'
+import { pluginIDSettings } from '../shared/legacy-settings/settings.js'
 
 export function MaskUIRootPage(useTheme: () => Theme, children: React.ReactNode, fallback?: React.ReactNode) {
     return compose(
@@ -41,7 +41,7 @@ function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
             <MaskThemeProvider useMaskIconPalette={(theme) => theme.palette.mode} useTheme={useTheme}>
                 <EnvironmentContextProvider value={context}>
                     <Web3ContextProvider value={context}>
-                        <LogContextProvider>
+                        <TelemetryProvider>
                             <SubscriptionProvider>
                                 <SharedContextProvider>
                                     <Suspense fallback={fallback}>
@@ -50,7 +50,7 @@ function MaskUIRoot({ children, useTheme, fallback }: MaskUIRootProps) {
                                     </Suspense>
                                 </SharedContextProvider>
                             </SubscriptionProvider>
-                        </LogContextProvider>
+                        </TelemetryProvider>
                     </Web3ContextProvider>
                 </EnvironmentContextProvider>
             </MaskThemeProvider>

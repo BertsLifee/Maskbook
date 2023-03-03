@@ -1,8 +1,8 @@
-import { omit } from 'lodash-es'
+import { omit, uniqWith } from 'lodash-es'
 import type { Subscription } from 'use-subscription'
 import type { Plugin } from '@masknet/plugin-infra'
-import { EMPTY_LIST, mapSubscription, mergeSubscription, StorageItem } from '@masknet/shared-base'
-import { isSameAddress, Wallet, WalletState as Web3WalletState } from '@masknet/web3-shared-base'
+import { EMPTY_LIST, mapSubscription, mergeSubscription, type StorageItem } from '@masknet/shared-base'
+import { isSameAddress, type Wallet, type WalletState as Web3WalletState } from '@masknet/web3-shared-base'
 
 type WalletStorage<ProviderType extends string> = Partial<Record<ProviderType, Wallet[]>>
 
@@ -54,6 +54,8 @@ export class WalletState<ProviderType extends string, Transaction> implements We
         return this.storage.initializedPromise
     }
 
+    setup() {}
+
     async addWallet(wallet: Wallet) {
         const now = new Date()
         const address = this.options.formatAddress(wallet.address)
@@ -97,6 +99,25 @@ export class WalletState<ProviderType extends string, Transaction> implements We
                       }
                     : x,
             ),
+        })
+    }
+
+    async updateOrAddWallet(wallet: Wallet) {
+        const target = this.all.find((x) => isSameAddress(x.address, wallet.address))
+        if (target) {
+            return this.updateWallet(
+                target.address,
+                omit(wallet, ['id', 'address', 'createdAt', 'updatedAt', 'storedKeyInfo']),
+            )
+        }
+        this.addWallet(wallet)
+    }
+
+    async updateWallets(wallets: Wallet[]) {
+        if (!wallets.length) return
+        await this.storage.setValue({
+            ...this.storage.value,
+            [this.providerType]: uniqWith([...this.all, ...wallets], (a, b) => isSameAddress(a.address, b.address)),
         })
     }
 

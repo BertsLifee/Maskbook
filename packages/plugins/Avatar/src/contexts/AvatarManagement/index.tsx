@@ -1,19 +1,19 @@
-import { BindingProof, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { type BindingProof, EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { first, noop } from 'lodash-es'
 import {
     createContext,
-    Dispatch,
-    FC,
+    type Dispatch,
+    type FC,
     memo,
-    PropsWithChildren,
-    SetStateAction,
+    type PropsWithChildren,
+    type SetStateAction,
     useContext,
     useMemo,
     useState,
 } from 'react'
-import { PFP_TYPE, SelectTokenInfo } from '../../types.js'
+import { PFP_TYPE, type SelectTokenInfo } from '../../types.js'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import type { SocialIdentity } from '@masknet/web3-shared-base'
 
@@ -69,12 +69,13 @@ export const AvatarManagementProvider: FC<Props> = memo(({ children, socialIdent
     const [proofs, setProofs] = useState<BindingProof[]>(EMPTY_LIST)
     const [tokenInfo, setTokenInfo] = useState<Web3Helper.NonFungibleTokenAll>()
     const { account } = useChainContext()
-    const [selectedAccount, setSelectedAccount] = useState(nextIDWallets[0]?.identity || account)
+    const [selectedAccount, setSelectedAccount] = useState('')
     const [selectedTokenInfo, setSelectedTokenInfo] = useState<SelectTokenInfo>()
 
     const contextValue: AvatarManagementContextOptions = useMemo(() => {
         setProof(first(nextIDPersonas))
         setProofs(nextIDWallets)
+        setSelectedAccount(account || first(nextIDWallets)?.identity || '')
         return {
             pfpType: PFP_TYPE.PFP,
             targetAccount: selectedAccount,
@@ -88,7 +89,7 @@ export const AvatarManagementProvider: FC<Props> = memo(({ children, socialIdent
             selectedTokenInfo,
             setSelectedTokenInfo,
         }
-    }, [selectedAccount, proof, proofs, tokenInfo, selectedTokenInfo, nextIDPersonas, nextIDWallets])
+    }, [selectedAccount, proof, proofs, tokenInfo, selectedTokenInfo, nextIDPersonas, nextIDWallets, account])
 
     return <AvatarManagementContext.Provider value={contextValue}>{children}</AvatarManagementContext.Provider>
 })

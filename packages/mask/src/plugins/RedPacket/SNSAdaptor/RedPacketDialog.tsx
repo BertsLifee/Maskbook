@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react'
 import { compact } from 'lodash-es'
+import Web3Utils from 'web3-utils'
 import { NetworkPluginID, PluginID } from '@masknet/shared-base'
 import {
     useChainContext,
@@ -10,23 +11,22 @@ import {
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
 import { InjectedDialog, NetworkTab } from '@masknet/shared'
-import { ChainId, GasConfig, GasEditor } from '@masknet/web3-shared-evm'
+import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { DialogContent, Tab } from '@mui/material'
 import { useActivatedPlugin } from '@masknet/plugin-infra/dom'
-import Web3Utils from 'web3-utils'
 import {
     useCurrentIdentity,
     useCurrentLinkedPersona,
     useLastRecognizedIdentity,
 } from '../../../components/DataSource/useActivatedUI.js'
-import { WalletMessages } from '../../Wallet/messages.js'
+import { WalletMessages } from '@masknet/plugin-wallet'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { useI18N } from '../locales/index.js'
 import { useI18N as useBaseI18N } from '../../../utils/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 import { RedPacketMetaKey } from '../constants.js'
-import { DialogTabs, RedPacketJSONPayload } from '../types.js'
+import { DialogTabs, type RedPacketJSONPayload } from '../types.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog.js'
 import { RedPacketPast } from './RedPacketPast.js'
@@ -117,7 +117,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const currentIdentity = useCurrentIdentity()
     const { closeDialog: closeApplicationBoardDialog } = useRemoteControlledDialog(
-        WalletMessages.events.ApplicationDialogUpdated,
+        WalletMessages.events.applicationDialogUpdated,
     )
     const lastRecognized = useLastRecognizedIdentity()
     const { value: linkedPersona } = useCurrentLinkedPersona()
@@ -227,7 +227,9 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         ) : null
                     }
                     networkTabs={
-                        step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog ? (
+                        step === CreateRedPacketPageStep.NewRedPacketPage &&
+                        !openNFTConfirmDialog &&
+                        !openSelectNFTDialog ? (
                             <div className={classes.abstractTabWrapper}>
                                 <NetworkTab
                                     classes={{
@@ -277,6 +279,8 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                             openNFTConfirmDialog={openNFTConfirmDialog}
                                             onClose={onClose}
                                             setIsNFTRedPacketLoaded={setIsNFTRedPacketLoaded}
+                                            gasOption={gasOption}
+                                            onGasOptionChange={handleGasSettingChange}
                                         />
                                     </TabPanel>
                                 </div>
@@ -292,6 +296,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                                 onBack={onBack}
                                 onCreated={handleCreated}
                                 settings={settings}
+                                gasOption={gasOption}
                             />
                         ) : null}
                     </DialogContent>

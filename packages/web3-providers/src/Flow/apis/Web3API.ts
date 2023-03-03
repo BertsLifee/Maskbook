@@ -3,28 +3,28 @@ import getUnixTime from 'date-fns/getUnixTime'
 import { unreachable } from '@masknet/kit'
 import {
     AddressType,
-    SchemaType,
-    ChainId,
-    Web3,
-    Web3Provider,
-    Transaction,
-    TransactionDetailed,
-    TransactionReceipt,
-    Block,
+    type SchemaType,
+    type ChainId,
+    type Web3,
+    type Web3Provider,
+    type Transaction,
+    type TransactionDetailed,
+    type TransactionReceipt,
+    type Block,
     createClient,
     createNativeToken,
     isNativeTokenAddress,
-    TransactionQuery,
-    TransactionSignature,
+    type TransactionQuery,
+    type TransactionSignature,
     TransactionStatusCode,
-    BlockHeader,
+    type BlockHeader,
 } from '@masknet/web3-shared-flow'
 import {
-    FungibleToken,
-    NonFungibleToken,
-    NonFungibleTokenMetadata,
-    NonFungibleTokenContract,
-    NonFungibleCollection,
+    type FungibleToken,
+    type NonFungibleToken,
+    type NonFungibleTokenMetadata,
+    type NonFungibleTokenContract,
+    type NonFungibleCollection,
     TransactionStatusType,
 } from '@masknet/web3-shared-base'
 import type { Web3BaseAPI } from '../../entry-types.js'
@@ -212,9 +212,13 @@ export class FlowWeb3API
     ): Promise<NonFungibleCollection<ChainId, SchemaType>> {
         throw new Error('Method not implemented.')
     }
+
     callTransaction(chainId: ChainId, transaction: TransactionQuery): Promise<string> {
         const web3 = this.getWeb3(chainId)
         return web3.query(transaction)
+    }
+    confirmTransaction(chainId: ChainId, hash: string, signal?: AbortSignal): Promise<TransactionReceipt> {
+        throw new Error('Method not implemented.')
     }
     estimateTransaction(chainId: ChainId, transaction: Transaction, fallback?: number | undefined): Promise<string> {
         throw new Error('Method not implemented.')

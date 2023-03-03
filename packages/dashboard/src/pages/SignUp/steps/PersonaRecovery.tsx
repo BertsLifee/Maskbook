@@ -4,7 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { delay } from '@masknet/kit'
 import { useCustomSnackbar } from '@masknet/theme'
 import { SmartPayOwner, SmartPayBundler } from '@masknet/web3-providers'
-import { DashboardRoutes, ECKeyIdentifier, EC_Public_JsonWebKey } from '@masknet/shared-base'
+import { DashboardRoutes, type ECKeyIdentifier, type EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { useDashboardI18N } from '../../../locales/index.js'
 import { SignUpRoutePath } from '../routePath.js'
 import { Messages, PluginServices, Services } from '../../../API.js'
@@ -85,7 +85,10 @@ export const PersonaRecovery = () => {
                 showSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
 
                 await delay(300)
-                Messages.events.restoreSuccess.sendToAll({ wallets: [] })
+                const persona = await Services.Identity.queryPersona(identifier)
+                Messages.events.restoreSuccess.sendToAll({
+                    wallets: persona?.address ? [persona.address] : [],
+                })
                 navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.ConnectSocialMedia}`)
             } catch (error) {
                 setError((error as Error).message)

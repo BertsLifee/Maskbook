@@ -1,15 +1,15 @@
 import { useContext } from 'react'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ContextOptions, createUITaskManager } from '../../UITaskManager.js'
+import { type ContextOptions, createUITaskManager } from '../../UITaskManager.js'
 import {
-    SelectFungibleTokenDialogProps,
+    type SelectFungibleTokenDialogProps,
     SelectFungibleTokenDialog,
 } from '../../components/SelectFungibleTokenDialog.js'
 
 const { TaskManagerContext, TaskManagerProvider: SelectFungibleTokenProvider } = createUITaskManager<
     SelectFungibleTokenDialogProps,
-    Web3Helper.FungibleTokenScope<'all'> | null
+    Web3Helper.FungibleTokenAll | null
 >(SelectFungibleTokenDialog)
 
 export function useSelectFungibleToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>() {

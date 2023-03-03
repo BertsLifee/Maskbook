@@ -5,7 +5,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
-import { SearchResultType, DomainResult } from '@masknet/web3-shared-base'
+import { SearchResultType, type DomainResult } from '@masknet/web3-shared-base'
 
 const sns: Plugin.SNSAdaptor.Definition = {
     ...base,
@@ -13,11 +13,11 @@ const sns: Plugin.SNSAdaptor.Definition = {
     SearchResultInspector: {
         ID: PluginID.Handle,
         UI: {
-            Content: ({ result }) => (
+            Content: ({ resultList }) => (
                 <SearchResultInspector
-                    keyword={result[0].keyword}
-                    keywordType={result[0].type}
-                    result={result[0] as DomainResult<ChainId>}
+                    keyword={resultList[0].keyword}
+                    keywordType={resultList[0].type}
+                    result={resultList[0] as DomainResult<ChainId>}
                 />
             ),
         },

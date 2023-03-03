@@ -7,15 +7,21 @@ import { Grid, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { useSharedI18N } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { ChainId, formatGweiToWei, formatWeiToGwei, GasOption, Transaction } from '@masknet/web3-shared-evm'
-import { formatBalance, GasOptionType, isPositive, isZero, scale10 } from '@masknet/web3-shared-base'
+import {
+    type ChainId,
+    formatGweiToWei,
+    formatWeiToGwei,
+    type GasOption,
+    type Transaction,
+} from '@masknet/web3-shared-evm'
+import { formatCurrency, GasOptionType, isPositive, isZero } from '@masknet/web3-shared-base'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useGasSchema } from './hooks/index.js'
 
 function getDefaultValues(transaction: Transaction, gasOptions: Record<GasOptionType, GasOption>) {
     return {
-        gasLimit: transaction.gas?.toString() ?? '21000',
+        gasLimit: transaction.gas ?? '21000',
         gasPrice: formatWeiToGwei(transaction.gasPrice || gasOptions.normal.suggestedMaxFeePerGas).toString(),
         maxPriorityFeePerGas: formatWeiToGwei(
             transaction.maxPriorityFeePerGas || gasOptions.normal.suggestedMaxPriorityFeePerGas,
@@ -176,7 +182,7 @@ export function GasForm(props: GasFormProps) {
                     }}
                     icon={<Icons.Info />}>
                     {t.gas_settings_info_gas_fee({
-                        fee: formatBalance(scale10(formatWeiToGwei(baseFeePerGas), 2), 2, 2),
+                        fee: formatCurrency(formatWeiToGwei(baseFeePerGas), ''),
                     })}
                 </MaskAlert>
             ) : null}

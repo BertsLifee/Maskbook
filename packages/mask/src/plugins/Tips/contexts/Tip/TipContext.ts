@@ -1,7 +1,7 @@
 import { noop } from 'lodash-es'
-import { createContext, Dispatch, SetStateAction } from 'react'
+import { createContext, type Dispatch, type SetStateAction } from 'react'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NonFungibleTokenContract, SocialAccount, TokenType } from '@masknet/web3-shared-base'
+import { type NonFungibleTokenContract, type SocialAccount, TokenType } from '@masknet/web3-shared-base'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import type { ValidationTuple } from '../../types/index.js'
 
@@ -32,6 +32,9 @@ export interface TipContextOptions {
     validation: ValidationTuple
     validatingRecipient: boolean
     recipientValidation: ValidationTuple
+    isAvailableBalance: boolean
+    isAvailableGasBalance: boolean
+    balance: string
 }
 
 export const TipContext = createContext<TipContextOptions>({
@@ -61,5 +64,8 @@ export const TipContext = createContext<TipContextOptions>({
     validation: [true],
     validatingRecipient: false,
     recipientValidation: [true],
+    isAvailableBalance: false,
+    isAvailableGasBalance: false,
+    balance: '',
 })
 TipContext.displayName = 'TipContext'

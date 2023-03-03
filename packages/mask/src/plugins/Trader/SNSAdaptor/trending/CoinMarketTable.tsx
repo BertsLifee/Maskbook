@@ -4,7 +4,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { WalletIcon } from '@masknet/shared'
-import { SourceType, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
+import { type SourceType, formatInteger, formatMarketCap, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
 import { useI18N } from '../../../../utils/index.js'
 import { useTrendingOverview } from '../../trending/useTrending.js'
@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         width: 132.5,
         height: 66,
-        background: theme.palette.background.default,
+        background: theme.palette.maskColor.bg,
         borderRadius: 8,
         justifyContent: 'center',
         alignItems: 'center',

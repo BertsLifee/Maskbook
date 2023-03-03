@@ -1,8 +1,12 @@
 {
+    "version": "0.1",
     "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
     "dictionaries": ["typescript", "node", "html", "css", "fonts"],
     "ignorePaths": [
         "./packages/web3-contracts/types/**",
+        "./packages/app/src/styles/index.css",
+        "./packages/app/tailwind.config.cjs",
+        "./packages/app/postcss.config.cjs",
         ".github",
         ".gitignore",
         ".prettierignore",
@@ -50,6 +54,7 @@
         "bluebar",
         "boba",
         "bonfida",
+        "cacheable",
         "caip",
         "canonify",
         "cashtag",
@@ -369,6 +374,7 @@
         "pnpm",
         "poap",
         "poaps",
+        "POSTOP",
         "powah",
         "powahs",
         "rari",
@@ -405,7 +411,8 @@
         "xyumi",
         "yumi",
         "yumiswap",
-        "zkscan"
+        "zkscan",
+        "Changeds"
     ],
     "ignoreRegExpList": ["/@servie/", "/[A-Za-z0-9]{46}/"],
     "overrides": [

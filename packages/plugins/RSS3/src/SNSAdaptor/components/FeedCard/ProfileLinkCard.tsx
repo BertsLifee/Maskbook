@@ -6,7 +6,7 @@ import type { FC } from 'react'
 import { Translate } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { CardType } from '../share.js'
-import { CardFrame, FeedCardProps } from '../base.js'
+import { CardFrame, type FeedCardProps } from '../base.js'
 import { Label } from './common.js'
 import { Icons } from '@masknet/icons'
 
@@ -117,7 +117,6 @@ export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...
                             classes={{
                                 container: classes.image,
                             }}
-                            optimistic
                             height={32}
                             width={32}
                             src={`https://cdn.stamp.fyi/avatar/${feed.owner}`}
@@ -131,7 +130,6 @@ export const ProfileLinkCard: FC<CollectibleCardProps> = ({ feed, className, ...
                             classes={{
                                 container: classes.image,
                             }}
-                            optimistic
                             src={`https://cdn.stamp.fyi/avatar/${metadata.address}`}
                             height={32}
                             width={32}
