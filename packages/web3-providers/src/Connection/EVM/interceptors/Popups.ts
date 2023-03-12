@@ -9,11 +9,11 @@ import {
     getSmartPayConstants,
     DepositPaymaster,
     PayloadEditor,
+    ProviderType,
 } from '@masknet/web3-shared-evm'
 import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
-import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
+import { EVM_Providers, SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { isGreaterThan, toFixed } from '@masknet/web3-shared-base'
-import { SharedContextSettings } from '../../../../../plugins/EVM/src/settings/index.js'
 
 const DEFAULT_PAYMENT_TOKEN_STATE = {
     allowMaskAsGas: false,
@@ -89,7 +89,9 @@ export class Popups implements Middleware<ConnectionContext> {
                 },
                 isUndefined,
             )
-            const response = await SharedContextSettings.value.send(context.request, options)
+            // const response = await SharedContextSettings.value.send(context.request, options)
+            const provider = await EVM_Providers[ProviderType.MaskWallet].createWeb3Provider(options)
+            const response = await provider.sendAsync(context.request, () => {})
             const editor = ErrorEditor.from(null, response)
 
             if (editor.presence) {
