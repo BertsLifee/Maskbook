@@ -8,13 +8,12 @@ import {
     type ConnectionContext,
     getTransactionStatusType,
 } from '@masknet/web3-shared-evm'
-import { Web3StateSettings } from '../../../settings/index.js'
 
 export class RecentTransaction implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         await next()
 
-        const { Transaction, TransactionWatcher, BalanceNotifier, BlockNumberNotifier } = Web3StateSettings.value
+        const { Transaction, TransactionWatcher, BalanceNotifier, BlockNumberNotifier } = context.state
 
         try {
             switch (context.method) {

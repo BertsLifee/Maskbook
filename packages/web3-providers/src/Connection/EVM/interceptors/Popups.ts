@@ -13,7 +13,7 @@ import {
 import { ExtensionSite, getSiteType, isEnhanceableSiteType } from '@masknet/shared-base'
 import { SmartPayBundler, Web3 } from '@masknet/web3-providers'
 import { isGreaterThan, toFixed } from '@masknet/web3-shared-base'
-import { SharedContextSettings } from '../../../settings/index.js'
+import { SharedContextSettings } from '../../../../../plugins/EVM/src/settings/index.js'
 
 const DEFAULT_PAYMENT_TOKEN_STATE = {
     allowMaskAsGas: false,

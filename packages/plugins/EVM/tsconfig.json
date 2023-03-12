@@ -5,7 +5,7 @@
     "outDir": "dist",
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
-  "include": ["src", "src/**/*.json"],
+  "include": ["src", "src/**/*.json", "../../web3-providers/src/Connection/EVM/interceptors"],
   "references": [
     { "path": "../../injected-script/sdk" },
     { "path": "../../plugin-infra" },

@@ -6,7 +6,6 @@ import {
     type Middleware,
     type ConnectionContext,
 } from '@masknet/web3-shared-evm'
-import { Web3StateSettings } from '../../../settings/index.js'
 import { isSameAddress, type TransactionContext, TransactionDescriptorType } from '@masknet/web3-shared-base'
 
 export class AddressBook implements Middleware<ConnectionContext> {
@@ -35,13 +34,12 @@ export class AddressBook implements Middleware<ConnectionContext> {
         if (!context.config) return
 
         try {
-            const { TransactionFormatter } = Web3StateSettings.value
+            const { AddressBook, TransactionFormatter } = context.state
             const formatContext = await TransactionFormatter?.createContext(context.chainId, context.config)
             const from = this.getFrom(formatContext)
             const to = this.getTo(formatContext) as string
 
-            if (!isSameAddress(from, to) && !isZeroAddress(to) && to)
-                await Web3StateSettings.value.AddressBook?.addAddress(context.chainId, to)
+            if (!isSameAddress(from, to) && !isZeroAddress(to) && to) await AddressBook?.addAddress(context.chainId, to)
         } catch {
             // to scan the context for available recipient address, allow to fail silently.
         }

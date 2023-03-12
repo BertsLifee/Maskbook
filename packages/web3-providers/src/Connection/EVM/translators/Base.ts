@@ -10,7 +10,6 @@ import {
     type Translator,
     type ConnectionContext,
 } from '@masknet/web3-shared-evm'
-import { Web3StateSettings } from '../../../settings/index.js'
 
 export class Base implements Translator<ConnectionContext> {
     async encode(context: ConnectionContext) {
@@ -30,7 +29,7 @@ export class Base implements Translator<ConnectionContext> {
             }
 
             // add gas price
-            const hub = Web3StateSettings.value.Hub?.getHub?.({
+            const hub = context.state.Hub?.getHub?.({
                 chainId: context.chainId,
             })
             const options = await hub?.getGasOptions?.(context.chainId)
