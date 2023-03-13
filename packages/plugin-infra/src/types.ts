@@ -766,6 +766,7 @@ export namespace Plugin.SNSAdaptor {
         identity?: ProfileIdentifier
         slot: LensSlot
         accounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
+        /** To update enabled/disabled status */
         onStatusUpdate?(disabled: boolean): void
     }
 
