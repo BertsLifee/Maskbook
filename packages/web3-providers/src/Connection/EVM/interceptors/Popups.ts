@@ -89,6 +89,7 @@ export class Popups implements Middleware<ConnectionContext> {
                 },
                 isUndefined,
             )
+
             // const response = await SharedContextSettings.value.send(context.request, options)
             const provider = await EVM_Providers[ProviderType.MaskWallet].createWeb3Provider(options)
             const response = await provider.sendAsync(context.request, () => {})
