@@ -9,7 +9,7 @@
     }
   },
   "dependencies": {
-    "@cyberlab/cyberconnect": "4.2.2",
+    "@cyberlab/cyberconnect": "5.0.0",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/shared": "workspace:^",
