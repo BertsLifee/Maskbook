@@ -7,7 +7,7 @@
     ".": null
   },
   "dependencies": {
-    "@balancer-labs/sor": "^1.0.0",
+    "@balancer-labs/sor": "^4.1.2",
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@ethersproject/abi": "^5.4.0",
     "@ethersproject/address": "^5.4.0",
