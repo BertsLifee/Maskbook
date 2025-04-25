@@ -50,7 +50,7 @@
     "react": "0.0.0-experimental-d1e35c703-20221110",
     "react-dom": "0.0.0-experimental-d1e35c703-20221110",
     "react-i18next": "^12.2.0",
-    "ses": "0.18.1",
+    "ses": "1.12.0",
     "ts-results-es": "3.5.0"
   },
   "devDependencies": {
