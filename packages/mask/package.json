@@ -122,7 +122,7 @@
     "lru-cache": "^7.10.1",
     "millify": "^4.0.0",
     "next-tick": "^1.1.0",
-    "opensea-js": "^1.2.7",
+    "opensea-js": "^5.0.0",
     "promievent": "^0.1.5",
     "protobufjs": "^6.11.2",
     "pure-react-carousel": "^1.28.1",
