@@ -157,7 +157,8 @@
     "web3-utils": "1.8.0",
     "webextension-polyfill": "^0.10.0",
     "z-schema": "^5.0.3",
-    "zod": "3.16.0"
+    "zod": "3.16.0",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "@nice-labs/emit-file-webpack-plugin": "^1.1.3",
@@ -179,5 +180,10 @@
   },
   "peerDependencies": {
     "tss-react": "^4.4.4"
-  }
+  },
+  "scripts": {
+    "prepare": "pnpm run snyk-protect",
+    "snyk-protect": "snyk-protect"
+  },
+  "snyk": true
 }

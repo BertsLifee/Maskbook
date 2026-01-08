@@ -1,0 +1,10 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.1
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  SNYK-JS-AXIOS-174505:
+    - '@masknet/plugin-handle > opensea-js > wyvern-schemas > axios':
+        patched: '2026-01-08T11:34:14.181Z'
+        id: SNYK-JS-AXIOS-174505
+        path: '@masknet/plugin-handle > opensea-js > wyvern-schemas > axios'
