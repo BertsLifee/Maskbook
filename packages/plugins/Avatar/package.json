@@ -28,7 +28,7 @@
     "bignumber.js": "9.1.0",
     "lru-cache": "^7.10.1",
     "react-avatar-editor": "^13.0.0",
-    "react-router-dom": "^6.4.3",
+    "react-router-dom": "^7.0.0",
     "react-use": "^17.4.0",
     "ts-results": "^3.3.0",
     "use-subscription": "^1.8.0",
