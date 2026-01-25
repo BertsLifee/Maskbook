@@ -26,7 +26,7 @@
     "@masknet/web3-shared-solana": "workspace:^",
     "bignumber.js": "9.1.0",
     "date-fns": "^2.29.3",
-    "opensea-js": "^1.2.7",
+    "opensea-js": "^6.0.0",
     "react-use": "^17.4.0",
     "ts-results": "^3.3.0",
     "unstated-next": "^1.1.0",
