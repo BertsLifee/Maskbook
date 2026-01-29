@@ -35,7 +35,7 @@
     "bignumber.js": "9.1.0",
     "date-fns": "2.29.3",
     "iframe-resizer-react": "^1.1.0",
-    "lodash-es": "^4.17.21",
+    "lodash-es": "^4.17.23",
     "lru-cache": "^7.10.1",
     "qrcode": "^1.5.0",
     "react-feather": "^2.0.9",
